@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@if (TempData["DangerMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <strong>@TempData["DangerMessage"]</strong>
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissable">
+        <strong>@TempData["SuccessMessage"]</strong>
+    </div>
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
