@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace COMP1640.Migrations
 {
-    public partial class init : Migration
+    public partial class initDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,8 @@ namespace COMP1640.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,12 +84,33 @@ namespace COMP1640.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Department",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    CordinatorId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Department", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Department_Users_CordinatorId",
+                        column: x => x.CordinatorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
+                    IsApproved = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     CategoryId = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -134,8 +156,8 @@ namespace COMP1640.Migrations
                 name: "UserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -179,8 +201,8 @@ namespace COMP1640.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -248,6 +270,60 @@ namespace COMP1640.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "101", "870d67c1-7545-4d2b-ab17-f430d9646ca5", "Admin", "ADMIN" },
+                    { "102", "589daf7a-20d4-4421-9db1-baad01f75855", "Coordinator", "COORDINATOR" },
+                    { "103", "d370d96f-5488-4c6d-94af-68d626951de8", "Manager", "MANAGER" },
+                    { "104", "3b5ad9c6-1927-4992-ac01-4084577bafbd", "Staff", "STAFF" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "201", 0, null, "c6ca2b31-c1ef-4fdb-a9e1-3447d56936d7", "Admin201@gmail.com", true, "Ngoc Huy", "Bui", false, null, "ADMIN201@GMAIL.COM", "ADMIN201@GMAIL.COM", "AQAAAAEAACcQAAAAEFXvpn8QGKCqH3NUjfyv3HNrJWBStKiaxFLC4lo0BnbD1iod6q6/lPbs12krDHKOUQ==", null, false, "e038f0eb-fed2-4152-89f2-a8ec664c59dc", false, "Admin201@gmail.com" },
+                    { "202", 0, null, "34309096-84e6-47d3-8558-8f8a21274c4f", "Manager202@gmail.com", true, "Thanh Binh", "Phan", false, null, "MANAGER202@GMAIL.COM", "MANAGER202@GMAIL.COM", "AQAAAAEAACcQAAAAECZcHE93YNTFvBDY/I1C7Fs8+p2fJim4czaNA0pW9P+btPyskWZy5UIqb4hqYS2bEg==", null, false, "666944a6-ac0f-4746-acff-a1a147272782", false, "Manager202@gmail.com" },
+                    { "203", 0, null, "092fea09-d166-4319-8344-ed2d5b51fa67", "Staff203@gmail.com", true, "Nguyen Thanh", "Trung", false, null, "STAFF203@GMAIL.COM", "STAFF203@GMAIL.COM", "AQAAAAEAACcQAAAAEIMHx+/9RVA/Jm4pxrFIAYfoorWbZA55B+uIlX7dn/9ferRKooMM6Bvj8xGVL9Mg+w==", null, false, "4e396f0b-99bd-4bb1-a511-d5a1f5ae7a55", false, "Staff203@gmail.com" },
+                    { "204", 0, null, "1154758c-7a9c-4efd-9588-e56fa06d61d9", "Coordinator204@gmail.com", true, "Anh", "Tuan", false, null, "COORDINATOR204@GMAIL.COM", "COORDINATOR204@GMAIL.COM", "AQAAAAEAACcQAAAAEKhUyYPVCOXoADpLXhrYxGrg8PfDDJNXEOE/dqMcYCAhIOZ+J/gDHCcR23tAZ2umxg==", null, false, "babf5e58-24f4-4ac3-a5a9-9fc39e7dd333", false, "Coordinator204@gmail.com" },
+                    { "205", 0, null, "73bbc996-a1e2-4670-864d-aa3a20d1d7dc", "Coordinator205@gmail.com", true, "Luan", "Vo", false, null, "COORDINATOR205@GMAIL.COM", "COORDINATOR205@GMAIL.COM", "AQAAAAEAACcQAAAAEM1HMovU1zrx3vStWMM7DBNBtrdN1lwRaarOL5eX4UpQIBO84t/lqs4kX8+vOlZCFA==", null, false, "607f54eb-62cf-41bd-ace3-ec228c9ab3e3", false, "Coordinator205@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Department",
+                columns: new[] { "Id", "CordinatorId", "Name" },
+                values: new object[,]
+                {
+                    { "0dd7b706-e89f-4fae-be8a-e06452326c51", "204", "Biological Sciences" },
+                    { "31d19ecf-81f1-4e78-b01e-abf19efe4ac5", "205", "Biostatistics" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[,]
+                {
+                    { "201", "101" },
+                    { "201", "102" },
+                    { "204", "102" },
+                    { "202", "102" },
+                    { "201", "103" },
+                    { "204", "103" },
+                    { "202", "103" },
+                    { "201", "104" },
+                    { "204", "104" },
+                    { "203", "104" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Department_CordinatorId",
+                table: "Department",
+                column: "CordinatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostComments_PostId",
@@ -321,6 +397,9 @@ namespace COMP1640.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Department");
+
             migrationBuilder.DropTable(
                 name: "PostComments");
 

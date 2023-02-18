@@ -13,6 +13,7 @@ namespace COMP1640.Models
         public string Content {get;set;}
         public DateTime Date {get;set;}
         public bool IsApproved { get;set;}
+        public bool IsActive { get; set; } 
         [ForeignKey("Category")]
         public string CategoryId { get; set; }
         public CategoryModel Category {get;set;}
