@@ -7,22 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using COMP1640.Data;
 using COMP1640.Models;
+using COMP1640.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace COMP1640.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize(Utils.Role.Manager)]
     public class CategoriesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoriesRepository _categoriesRepository;
 
-        public CategoriesController(ApplicationDbContext context)
+        public CategoriesController(ICategoriesRepository categoriesRepository)
         {
-            _context = context;
+            _categoriesRepository = categoriesRepository;
         }
 
         // GET: User/Categorys
         public async Task<IActionResult> Index()
         {
+
             return View(await _context.Categories.ToListAsync());
         }
 
