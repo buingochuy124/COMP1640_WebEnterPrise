@@ -1,4 +1,4 @@
-﻿using COMP1640.Models;
+﻿    using COMP1640.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +12,7 @@ namespace COMP1640.Data.SeedData
             SeedRoles(builder);
             SeedUsers(builder);
             SeedUserRoles(builder);
-
+            SeedDepartment(builder);
         }
         public static void SeedRoles(ModelBuilder builder)
         {
@@ -102,6 +102,36 @@ namespace COMP1640.Data.SeedData
                     LastName = "Tuan",
                     EmailConfirmed = true,
 
+                },
+                new AppUserModel()
+                {
+                    Id = "205",
+                    UserName = "Coordinator205@gmail.com",
+                    NormalizedUserName = "Coordinator205@gmail.com".ToUpper(),
+                    Email = "Coordinator205@gmail.com",
+                    NormalizedEmail = "Coordinator205@gmail.com".ToUpper(),
+                    PasswordHash = hasher.HashPassword(null, "Default@123"),
+                    SecurityStamp = Guid.NewGuid().ToString("D"),
+                    FirstName = "Luan",
+                    LastName = "Vo",
+                    EmailConfirmed = true,
+
+                });
+        }
+        public static void SeedDepartment(ModelBuilder builder)
+        {
+            builder.Entity<DepartmentModel>().HasData(
+                new DepartmentModel
+                {
+                    Id = Guid.NewGuid().ToString("D"),
+                    Name = "Biological Sciences",
+                    CordinatorId = "204"
+                },
+                new DepartmentModel
+                {
+                    Id = Guid.NewGuid().ToString("D"),
+                    Name = "Biostatistics",
+                    CordinatorId = "205"
                 });
         }
         public static void SeedUserRoles(ModelBuilder builder)
