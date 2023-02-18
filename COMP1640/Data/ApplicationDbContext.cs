@@ -23,7 +23,7 @@ namespace COMP1640.Data
         public DbSet<RoleModel> Roles { get; set; }
         public DbSet<PostInteractModel> PostInteracts{ get; set; }
         public DbSet<PostCommentModel> PostComments { get; set; }
-
+        public DbSet<DepartmentModel> Department { get; set; }
 
 
 
