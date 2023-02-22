@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace COMP1640.Models
@@ -8,6 +9,7 @@ namespace COMP1640.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        public DateTime Date { get; set; }
 
         [ForeignKey("User")]
         public string UserId { get; set; }

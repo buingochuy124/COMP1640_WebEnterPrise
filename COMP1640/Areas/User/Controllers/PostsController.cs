@@ -10,6 +10,7 @@ using COMP1640.Models;
 using System.Xml.Linq;
 using System.Security.Claims;
 using System.Net.WebSockets;
+using COMP1640.ViewModels.Response;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -29,37 +30,48 @@ namespace COMP1640.Areas.User.Controllers
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
+           //     .Include(p => p.PostComments)
+               // .Include(p => p.PostInteracts)
                 .ToListAsync();
             ViewBag.Anonymous = "Anonymous";
 
+            ViewBag.ListCategoryName =  _context.Categories.Select(c => c.Name).ToList();
             var role = User.FindFirstValue(ClaimTypes.Role);
-           
-            return View(posts);
+            var result = posts.OrderByDescending(p => p.Date).ToList();
+
+
+
+            return View(result);
         }
 
-        // GET: User/Posts/Create
-        public IActionResult Create()
-        {
-            ViewData["CategoryName"] = new SelectList(_context.Categories, "Name", "Name");
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
+        public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
         {
             postModel.Date =  DateTime.Now;
             postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            postModel.CategoryId = _context.Categories.FirstOrDefault(C => C.Name == postModel.CategoryName).Id;
+            postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
             if (ModelState.IsValid)
             {
                 _context.Add(postModel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            return View(postModel);
-        }
 
+            return Json(new UserReponseManager { Message = "Some thing wrong ..." });
+        }
+        public async Task<IActionResult> CreatePostComment([Bind("Content,Date,IsAnonymous,PostId")] PostCommentModel postCommentModel)
+        {
+            postCommentModel.Date = DateTime.Now;
+            postCommentModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid)
+            {
+                _context.Add(postCommentModel);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return Json(new UserReponseManager { Message = "Some thing wrong ..." });
+
+        }
 
         private bool PostModelExists(string id)
         {
