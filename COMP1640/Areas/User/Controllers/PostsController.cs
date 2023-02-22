@@ -25,13 +25,13 @@ namespace COMP1640.Areas.User.Controllers
         }
 
         // GET: User/Posts
-        public async Task<IActionResult> Index()
+        public  async Task<IActionResult> Index()
          {
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
-           //     .Include(p => p.PostComments)
-               // .Include(p => p.PostInteracts)
+             // .Include(p => p.PostComments)
+             // .Include(p => p.PostInteracts)
                 .ToListAsync();
             ViewBag.Anonymous = "Anonymous";
 
@@ -39,7 +39,18 @@ namespace COMP1640.Areas.User.Controllers
             var role = User.FindFirstValue(ClaimTypes.Role);
             var result = posts.OrderByDescending(p => p.Date).ToList();
 
-
+            foreach (var item in result)
+            {
+                var comments = await _context.PostComments.Where(p => p.PostId == item.Id).ToListAsync();
+                if(comments.Count != 0 )
+                {
+                    item.PostComments = new List<PostCommentModel>();
+                    foreach (var comment in comments)
+                    {
+                        item.PostComments.Add(comment);
+                    }
+                }
+            }
 
             return View(result);
         }

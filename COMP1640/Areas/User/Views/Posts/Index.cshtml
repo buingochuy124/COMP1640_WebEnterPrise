@@ -104,7 +104,7 @@
                                                         <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""></span>
                                                         <span class="username">
                                                             <a href="javascript:;">
-                                                                    @if (User.IsInRole("Staff"))
+                                                            @if (!User.IsInRole("Manager"))
                                                                     {
                                                                         if (item.IsAnonymous == true)
                                                                         {
@@ -112,17 +112,22 @@
                                                                         }
                                                                         else
                                                                         {
-                                                                            @Html.DisplayFor(modelItem => item.User.LastName)
+                                                                            @Html.DisplayFor(modelItem => item.User.FirstName)
                                                                         }
+                                                                    }
+                                                                    else{
+                                                                         @Html.DisplayFor(modelItem => item.User.FirstName)
                                                                     }
                                                             </a> <small></small>
                                                         </span>
                                                     </div>
                                                     <div class="timeline-content">
                                                         <p>
-                                                                 @Html.DisplayFor(modelItem => item.Content)
-
+                                                            @Html.DisplayFor(modelItem => item.Content)
                                                         </p>
+                                                     
+                                                   
+                                 
                                                         <p class="text-primary">
                                                             #@Html.DisplayFor(modelItem => item.Category.Name)
                                                         </p>
@@ -134,24 +139,57 @@
                                                         <a href="javascript:;" class="m-r-15 text-inverse-lighter"><i class="fa fa-comments fa-fw fa-lg m-r-3"></i> Comment</a>
 
                                                     </div>
+
                                                     <div class="timeline-comment-box" style="background-color:#f2f3f4">
+                                                    @if (item.PostComments != null)
+                                                    {
+                                                        @foreach (var comment in item.PostComments)
+                                                        {
+                                                            <div class="form-control">
+                                                                @if (!User.IsInRole("Manager"))
+                                                                {
+                                                                    @if(comment.IsAnonymous == true){
+                                                                        <p>
+                                                                            @ViewBag.Anonymous: @comment.Content
+                                                                        </p>
+
+                                                                    }
+                                                                    else{
+                                                                        <p>@comment.User.FirstName: @comment.Content</p>
+
+                                                                    }
+                                                                }
+                                                                else{
+                                                                <p>@comment.User.FirstName: @comment.Content</p>
+
+                                                                }
+                                                  
+                                                                <hr>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    <br />
+                                                    <br />
                                                         <div class="user"><img src="https://bootdey.com/img/Content/avatar/avatar3.png"></div>
                                                         <div class="input pb-4">
                                                             <form>
                                                                 <div class="input-group">
-                                                                    <br />
-                                                                    <br />
-
-                                                                <textarea class="form-control" placeholder="Write a comment..." id="commentContent" name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                                                   
+                                                            
+                                                               
+                                                                <textarea class="form-control" placeholder="Write a comment..." id="commentContent_@item.Id" name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                                     <span class="input-group-btn p-l-10">
-                                                                        <button class="btn btn-primary f-s-12 rounded-corner" id="btn_comment" type="button">Comment</button>
+
+                                                                    <button class="btn btn-primary f-s-12 rounded-corner" id="btn_comment_@item.Id" type="button">Comment</button>
+
                                                                     </span>
+                                                                    <p id="postId" style="display:none">@item.Id</p>
                                                                 </div>
                                                                 <div class="">
                                                                     <label class="form-check-label"  style="position:absolute">
                                                                         Anonymous Comment
                                                                     </label>
-                                                                    <input type="checkbox" class="form-check-input" id="anonymousComment" value="Anonymous">
+                                                                <input type="checkbox" class="form-check-input" id="anonymousComment_@item.Id" value="Anonymous">
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -195,8 +233,10 @@
         $("#btn_submitpost").click(function () {
             btn_submitpost();
         });
-        $("#btn_comment").click(function () {
-            btn_comment();
+        $("button[id^='btn_comment_']").click(function () {
+            var postId = $(this).attr("id").split("_")[2];
+
+            btn_comment(postId);
         });
     });
     function btn_submitpost() {
@@ -223,14 +263,14 @@
             }
         });
     }
-    function btn_comment() {
-        var commentContent = $("#commentContent").val();
-        var anonymousComment = $("#anonymousPost").is(":checked");
-
+    function btn_comment(postId) {
+        var commentContent = $("#commentContent_" + postId).val();
+        var anonymousComment = $("#anonymousComment_"+postId).is(":checked");
 
         var postCommentModel = {
             Content: commentContent,
             IsAnonymous: anonymousComment,
+            PostId: postId
         };
         $.ajax({
             type: "GET", // GET / POST / DELETE
