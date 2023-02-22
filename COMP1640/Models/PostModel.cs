@@ -26,7 +26,6 @@ namespace COMP1640.Models
         public string UserId { get; set; }
         public AppUserModel User { get; set; }
 
-        [NotMapped]
         public List<PostCommentModel> PostComments {get; set;}   
         public List<PostInteractModel> PostInteracts {get; set;}
     }
