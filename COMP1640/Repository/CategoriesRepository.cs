@@ -44,13 +44,61 @@ namespace COMP1640.Repository
             };
         }
 
+        public async Task<UserReponseManager> DeleteCategory(string id)
+        {
+            var category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
+
+            if(category == null)
+            {
+                return new UserReponseManager
+                {
+                    IsSuccess = false,
+                    message = "Category Not Found ..."
+                };
+            }
+            _context.Remove(category);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return new UserReponseManager
+                {
+                    IsSuccess = false,
+                    message = "Deleted Fail, Some thing wrong ..."
+                };
+            }
+            return new UserReponseManager
+            {
+                IsSuccess = true,
+                message = "Deleted Category ..."
+            };
+        }
+
         public async Task<UserReponseManager> DisableCategory(string id)
         {
             var category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
-            category.Is
+            category.IsActive﻿ = false;
             _context.Entry(category).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return new UserReponseManager
+                {
+                    IsSuccess = false,
+                    message = "Disable Fail, Some thing wrong ..."
+                };
 
-
+            }
+            return new UserReponseManager
+            {
+                IsSuccess = true,
+                message = "Disabled ..."
+            };
 
         }
 
@@ -60,9 +108,40 @@ namespace COMP1640.Repository
             return categories;
         }
 
-        public Task<UserReponseManager> UpdateCategory(CategoriesViewModel model)
+        public async Task<CategoryModel> GetCategory(string id)
         {
-            throw new System.NotImplementedException();
+            var category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
+            return category;
+        }
+
+        public async Task<UserReponseManager> UpdateCategory(CategoriesViewModel model)
+        {
+
+            var newCategory = new CategoryModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                IsActive = model.IsActive,
+            };
+            _context.Entry(newCategory).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (System.Exception)
+            {
+                return new UserReponseManager
+                {
+                    IsSuccess = false,
+                    message = "Disable Fail, Some thing wrong ..."
+                };
+
+            }
+            return new UserReponseManager
+            {
+                IsSuccess = true,
+                message = "Disabled ..."
+            };
         }
     }
 }

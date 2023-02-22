@@ -64,10 +64,10 @@ namespace COMP1640.Data.SeedData
                 new AppUserModel()
                 {
                     Id = "202",
-                    UserName = "Manager202@gmail.com",
-                    NormalizedUserName = "Manager202@gmail.com".ToUpper(),
-                    Email = "Manager202@gmail.com",
-                    NormalizedEmail = "Manager202@gmail.com".ToUpper(),
+                    UserName = "Coordinator202@gmail.com",
+                    NormalizedUserName = "Coordinator205@gmail.com".ToUpper(),
+                    Email = "Coordinator205@gmail.com",
+                    NormalizedEmail = "Coordinator205@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
                     FirstName = "Thanh Binh",
@@ -75,13 +75,27 @@ namespace COMP1640.Data.SeedData
                     EmailConfirmed = true,
 
                 },
+                 new AppUserModel()
+                 {
+                     Id = "203",
+                     UserName = "Coordinator203@gmail.com",
+                     NormalizedUserName = "Coordinator206@gmail.com".ToUpper(),
+                     Email = "Coordinator206@gmail.com",
+                     NormalizedEmail = "Coordinator206@gmail.com".ToUpper(),
+                     PasswordHash = hasher.HashPassword(null, "Default@123"),
+                     SecurityStamp = Guid.NewGuid().ToString("D"),
+                     FirstName = "Luan",
+                     LastName = "Vo",
+                     EmailConfirmed = true,
+
+                 },
                 new AppUserModel()
                 {
-                    Id = "203",
-                    UserName = "Staff203@gmail.com",
-                    NormalizedUserName = "Staff203@gmail.com".ToUpper(),
-                    Email = "Staff203@gmail.com",
-                    NormalizedEmail = "Staff203@gmail.com".ToUpper(),
+                    Id = "204",
+                    UserName = "Manager204@gmail.com",
+                    NormalizedUserName = "Manager203@gmail.com".ToUpper(),
+                    Email = "Manager203@gmail.com",
+                    NormalizedEmail = "Manager203@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
                     FirstName = "Nguyen Thanh",
@@ -91,32 +105,19 @@ namespace COMP1640.Data.SeedData
                 },
                 new AppUserModel()
                 {
-                    Id = "204",
-                    UserName = "Coordinator204@gmail.com",
-                    NormalizedUserName = "Coordinator204@gmail.com".ToUpper(),
-                    Email = "Coordinator204@gmail.com",
-                    NormalizedEmail = "Coordinator204@gmail.com".ToUpper(),
+                    Id = "205",
+                    UserName = "Staff205@gmail.com",
+                    NormalizedUserName = "Staff204@gmail.com".ToUpper(),
+                    Email = "Staff204@gmail.com",
+                    NormalizedEmail = "Staff204@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
                     FirstName = "Anh",
                     LastName = "Tuan",
                     EmailConfirmed = true,
 
-                },
-                new AppUserModel()
-                {
-                    Id = "205",
-                    UserName = "Coordinator205@gmail.com",
-                    NormalizedUserName = "Coordinator205@gmail.com".ToUpper(),
-                    Email = "Coordinator205@gmail.com",
-                    NormalizedEmail = "Coordinator205@gmail.com".ToUpper(),
-                    PasswordHash = hasher.HashPassword(null, "Default@123"),
-                    SecurityStamp = Guid.NewGuid().ToString("D"),
-                    FirstName = "Luan",
-                    LastName = "Vo",
-                    EmailConfirmed = true,
-
                 });
+          
         }
         public static void SeedDepartment(ModelBuilder builder)
         {
@@ -168,44 +169,64 @@ namespace COMP1640.Data.SeedData
               new IdentityUserRole<string>
               {
                   // Phan Thanh Binh
-                  UserId = "204",
+                  UserId = "202",
                   RoleId = "102"
 
               },
               new IdentityUserRole<string>
               {
                   // Phan Thanh Binh
-                  UserId = "204",
+                  UserId = "202",
                   RoleId = "103"
 
               },
               new IdentityUserRole<string>
               {
                   // Phan Thanh Binh
-                  UserId = "204",
+                  UserId = "202",
                   RoleId = "104"
        
               },
               new IdentityUserRole<string>
               {
-                  // Nguyen Thanh Trung
-                  UserId = "202",
+                  // Phan Thanh Binh
+                  UserId = "203",
                   RoleId = "102"
 
               },
               new IdentityUserRole<string>
               {
-                  // Nguyen Thanh Trung
-                  UserId = "202",
+                  // Phan Thanh Binh
+                  UserId = "203",
                   RoleId = "103"
+
+              },
+              new IdentityUserRole<string>
+              {
+                  // Phan Thanh Binh
+                  UserId = "203",
+                  RoleId = "104"
+
+              },
+              new IdentityUserRole<string>
+              {
+                  // Nguyen Thanh Trung
+                  UserId = "204",
+                  RoleId = "103"
+
+              },
+              new IdentityUserRole<string>
+              {
+                  // Nguyen Thanh Trung
+                  UserId = "204",
+                  RoleId = "104"
            
               },
               new IdentityUserRole<string>
               {
                   // Tuan Anh
-                  UserId = "203",
+                  UserId = "205",
                   RoleId = "104"
-
               });
 
         }

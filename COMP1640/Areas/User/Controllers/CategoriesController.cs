@@ -9,11 +9,11 @@ using COMP1640.Data;
 using COMP1640.Models;
 using COMP1640.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using COMP1640.ViewModels;
 
 namespace COMP1640.Areas.User.Controllers
 {
     [Area("User")]
-    [Authorize(Utils.Role.Manager)]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesRepository _categoriesRepository;
@@ -26,8 +26,7 @@ namespace COMP1640.Areas.User.Controllers
         // GET: User/Categorys
         public async Task<IActionResult> Index()
         {
-
-            return View(await _context.Categories.ToListAsync());
+            return View(await _categoriesRepository.GetCategories());
         }
 
         // GET: User/Categorys/Details/5
@@ -38,8 +37,7 @@ namespace COMP1640.Areas.User.Controllers
                 return NotFound();
             }
 
-            var categoryModel = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoryModel = await _categoriesRepository.GetCategory(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -59,15 +57,14 @@ namespace COMP1640.Areas.User.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] CategoryModel categoryModel)
+        public async Task<IActionResult> Create([Bind("Id,Name")] CategoriesViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categoryModel);
-                await _context.SaveChangesAsync();
+                await _categoriesRepository.CreateCategory(categoryViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryModel);
+            return View(categoryViewModel);
         }
 
         // GET: User/Categorys/Edit/5
@@ -77,13 +74,17 @@ namespace COMP1640.Areas.User.Controllers
             {
                 return NotFound();
             }
-
-            var categoryModel = await _context.Categories.FindAsync(id);
+            var categoryModel = await _categoriesRepository.GetCategory(id);
             if (categoryModel == null)
             {
                 return NotFound();
             }
-            return View(categoryModel);
+            return View(new CategoriesViewModel
+            {
+                Id = categoryModel.Id,
+                Name = categoryModel.Name,
+                IsActive = categoryModel.IsActive,
+            });
         }
 
         // POST: User/Categorys/Edit/5
@@ -91,34 +92,20 @@ namespace COMP1640.Areas.User.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name")] CategoryModel categoryModel)
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name")] CategoriesViewModel categoryViewModel)
         {
-            if (id != categoryModel.Id)
+            if (id != categoryViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(categoryModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryModelExists(categoryModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+               
+                await  _categoriesRepository.UpdateCategory(categoryViewModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryModel);
+            return View(categoryViewModel);
         }
 
         // GET: User/Categorys/Delete/5
@@ -129,8 +116,7 @@ namespace COMP1640.Areas.User.Controllers
                 return NotFound();
             }
 
-            var categoryModel = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoryModel = await _categoriesRepository.GetCategory(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -144,15 +130,8 @@ namespace COMP1640.Areas.User.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var categoryModel = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(categoryModel);
-            await _context.SaveChangesAsync();
+            await _categoriesRepository.DeleteCategory(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategoryModelExists(string id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }

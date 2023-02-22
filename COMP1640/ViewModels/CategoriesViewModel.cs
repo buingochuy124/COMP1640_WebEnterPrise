@@ -7,6 +7,8 @@ namespace COMP1640.ViewModels
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool IsActive﻿ { get; set; }
+
         public List<PostModel> Posts { get; set; }
     }
 }
