@@ -34,13 +34,13 @@ namespace COMP1640.Repository
                 return new UserReponseManager
                 {
                     IsSuccess= false,
-                    message = "Some thing wrong, try again ..."
+                    Message = "Some thing wrong, try again ..."
                 };
             }
             return new UserReponseManager
             {
                 IsSuccess = true,
-                message = "Created ..."
+                Message = "Created ..."
             };
         }
 
@@ -53,7 +53,7 @@ namespace COMP1640.Repository
                 return new UserReponseManager
                 {
                     IsSuccess = false,
-                    message = "Category Not Found ..."
+                    Message = "Category Not Found ..."
                 };
             }
             _context.Remove(category);
@@ -66,13 +66,13 @@ namespace COMP1640.Repository
                 return new UserReponseManager
                 {
                     IsSuccess = false,
-                    message = "Deleted Fail, Some thing wrong ..."
+                    Message = "Deleted Fail, Some thing wrong ..."
                 };
             }
             return new UserReponseManager
             {
                 IsSuccess = true,
-                message = "Deleted Category ..."
+                Message = "Deleted Category ..."
             };
         }
 
@@ -90,14 +90,14 @@ namespace COMP1640.Repository
                 return new UserReponseManager
                 {
                     IsSuccess = false,
-                    message = "Disable Fail, Some thing wrong ..."
+                    Message = "Disable Fail, Some thing wrong ..."
                 };
 
             }
             return new UserReponseManager
             {
                 IsSuccess = true,
-                message = "Disabled ..."
+                Message = "Disabled ..."
             };
 
         }
@@ -133,14 +133,14 @@ namespace COMP1640.Repository
                 return new UserReponseManager
                 {
                     IsSuccess = false,
-                    message = "Disable Fail, Some thing wrong ..."
+                    Message = "Disable Fail, Some thing wrong ..."
                 };
 
             }
             return new UserReponseManager
             {
                 IsSuccess = true,
-                message = "Disabled ..."
+                Message = "Disabled ..."
             };
         }
     }

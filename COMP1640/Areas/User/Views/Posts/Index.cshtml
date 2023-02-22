@@ -1,10 +1,8 @@
-﻿@model List<COMP1640.Models.PostModel>
-
-
- 
+﻿@model List<COMP1640.Models.PostModel> 
 @{
     ViewData["Title"] = "Post";
-    var now = DateTime.Today;
+    var now = DateTime.Now;
+    List<string> listCategoryName = ViewBag.ListCategoryName;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -41,24 +39,38 @@
                                        
                                         <div class="timeline-body" style="background-color:#f2f3f4">
                                             <div class="input pb-4">
-                                                <form action="">
+
+                                                <form asp-action="Create">
                                                     <div class="input-group">
                                                         <br />
                                                         <br />
 
-                                                        <textarea class="form-control" placeholder="Write a comment..." name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
-                                                        
+                                                        <textarea class="form-control" placeholder="Write content for post..." name="text" id="postContent" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>                                                  
                                                     </div>
-                                                    <br/>
-                                                    <span class="input-group-btn p-l-10 ">
-                                                        <button class="btn btn-primary f-s-12 rounded-corner" id="btn_comment" type="button">Submit</button>
-                                                    </span>
-                                                    <div class="p-1">
-                                                        <label class="form-check-label" style="position:absolute">
+                                                    <br />
+                                                    <select class="custom-select mb-1" id="categoryName">
+                                                        @foreach (var item in listCategoryName)
+                                                        {
+                                                            <option value="@item">@item</option>
+                                                        }
+                                                    </select>
+
+                                                    <div class= "p-1">
+
+                                                        <label class="form-check-label text-danger" style="position:absolute">
                                                             Anonymous Post
                                                         </label>
-                                                        <input type="checkbox" class="form-check-input" id="anonymouscomment" value="Anonymous">
+                                                        <input type="checkbox" class="form-check-input" id="anonymousPost" value="Anonymous">
+
                                                     </div>
+                                                    <span class="input-group-btn p-l-10 ">
+                                                        <br />
+
+                                                        <button class="btn btn-primary f-s-12 rounded-corner" id="btn_submitpost" type="button">Submit Post</button>
+                                                    </span>
+                                                    <br />
+
+                                                   
 
                                                         
                                                 </form>
@@ -73,7 +85,19 @@
                                             <li>
 
                                                 <div class="timeline-time">
-                                                    <span class="date">@(Convert.ToInt32((now - item.Date).TotalDays)) Day ago</span>
+
+                                                @if(((int)(now - item.Date).TotalMinutes / 60) > 0 ){
+                                                    <span class="date">@((int)(now - item.Date).TotalMinutes / 60 )h@((int)(now - item.Date).TotalMinutes %60) min ago </span>
+                                                }
+                                                else if ((int)(now - item.Date).TotalMinutes % 60 > 0)
+                                                {
+                                                    <span class="date">@((int)(now - item.Date).TotalMinutes % 60) min ago</span>
+                                                }
+                                                else{
+                                                    <span class="date">@((int)(now - item.Date).TotalSeconds) second ago</span>
+
+                                                }
+
                                                 </div>
                                                 <div class="timeline-body" style="background-color:#dee2e6">
                                                     <div class="timeline-header">
@@ -113,12 +137,12 @@
                                                     <div class="timeline-comment-box" style="background-color:#f2f3f4">
                                                         <div class="user"><img src="https://bootdey.com/img/Content/avatar/avatar3.png"></div>
                                                         <div class="input pb-4">
-                                                            <form action="">
+                                                            <form>
                                                                 <div class="input-group">
                                                                     <br />
                                                                     <br />
-                                                                 
-                                                                    <textarea class="form-control" placeholder="Write a comment..." name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+
+                                                                <textarea class="form-control" placeholder="Write a comment..." id="commentContent" name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
                                                                     <span class="input-group-btn p-l-10">
                                                                         <button class="btn btn-primary f-s-12 rounded-corner" id="btn_comment" type="button">Comment</button>
                                                                     </span>
@@ -127,7 +151,7 @@
                                                                     <label class="form-check-label"  style="position:absolute">
                                                                         Anonymous Comment
                                                                     </label>
-                                                                    <input type="checkbox" class="form-check-input" id="anonymouscomment" value="Anonymous">
+                                                                    <input type="checkbox" class="form-check-input" id="anonymousComment" value="Anonymous">
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -154,10 +178,74 @@
                     </div>
                 </div>
             </div>
-        </div>
+         </div>
     </div>
+
     <script type="text/javascript">
 
     </script>
 </body>
 </html>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#btn_submitpost").click(function () {
+            btn_submitpost();
+        });
+        $("#btn_comment").click(function () {
+            btn_comment();
+        });
+    });
+    function btn_submitpost() {
+        var postContent = $("#postContent").val();
+        var isAnonymous = $("#anonymousPost").is(":checked");
+        var categoryName = $("#categoryName").val();
+
+
+        var postModel = {
+            IsAnonymous: isAnonymous,
+            Content: postContent,
+            CategoryName: categoryName
+        };
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/User/Posts/CreatePost",
+            data: postModel,    // multiple data sent using ajax
+            success: function (data) {
+                alert("Posted");
+                setTimeout(function () {
+                    window.location.href = "/User/Posts/Index";
+                }, 1000);
+            }
+        });
+    }
+    function btn_comment() {
+        var commentContent = $("#commentContent").val();
+        var anonymousComment = $("#anonymousPost").is(":checked");
+
+
+        var postCommentModel = {
+            Content: commentContent,
+            IsAnonymous: anonymousComment,
+        };
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/User/Posts/CreatePostComment",
+            data: postCommentModel,    // multiple data sent using ajax
+            success: function (data) {
+                alert("Posted");
+                setTimeout(function () {
+                    window.location.href = "/User/Posts/Index";
+                }, 1000);
+            }
+        });
+    }
+    
+</script>
+
+                                    
