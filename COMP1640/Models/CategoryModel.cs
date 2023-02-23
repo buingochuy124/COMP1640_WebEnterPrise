@@ -11,6 +11,7 @@ namespace COMP1640.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsActive﻿ { get; set; }
+
         [NotMapped]
         public List<PostModel> Posts { get; set; }
     }
