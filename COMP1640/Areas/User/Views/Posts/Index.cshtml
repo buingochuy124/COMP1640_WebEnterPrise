@@ -1,59 +1,291 @@
-﻿@model IEnumerable<COMP1640.Models.PostModel>
-
+﻿@model List<COMP1640.Models.PostModel> 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Post";
+    var now = DateTime.Now;
+    List<string> listCategoryName = ViewBag.ListCategoryName;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsApproved)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsApproved)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+    <title>Posts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="~/css/poststyle.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container" >
+
+        <div class="row">
+           
+            <div class="col-md-12">
+              
+                <div id="content" class="content content-full-width">
+                        <div class="profile-content">
+
+                            <div class="tab-content p-0">
+
+                                <div class="tab-pane fade active show" id="profile-post">
+
+                                    <ul class="timeline">
+                                        <li>
+                                       
+                                        <div class="timeline-body" style="background-color:#f2f3f4">
+                                            <div class="input pb-4">
+
+                                                <form asp-action="Create">
+                                                    <div class="input-group">
+                                                        <br />
+                                                        <br />
+
+                                                        <textarea class="form-control" placeholder="Write content for post..." name="text" id="postContent" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>                                                  
+                                                    </div>
+                                                    <br />
+                                                    <select class="custom-select mb-1" id="categoryName">
+                                                        @foreach (var item in listCategoryName)
+                                                        {
+                                                            <option value="@item">@item</option>
+                                                        }
+                                                    </select>
+
+                                                    <div class= "p-1">
+
+                                                        <label class="form-check-label text-danger" style="position:absolute">
+                                                            Anonymous Post
+                                                        </label>
+                                                        <input type="checkbox" class="form-check-input" id="anonymousPost" value="Anonymous">
+
+                                                    </div>
+                                                    <span class="input-group-btn p-l-10 ">
+                                                        <br />
+
+                                                        <button class="btn btn-primary f-s-12 rounded-corner" id="btn_submitpost" type="button">Submit Post</button>
+                                                    </span>
+                                                    <br />
+
+                                                   
+
+                                                        
+                                                </form>
+                                            </div>
+                                        </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="timeline">
+                                       
+                                        @foreach (var item in Model)
+                                            {
+                                            <li>
+
+                                                <div class="timeline-time">
+
+                                                @if(((int)(now - item.Date).TotalMinutes / 60) > 0 ){
+                                                    <span class="date">@((int)(now - item.Date).TotalMinutes / 60 )h@((int)(now - item.Date).TotalMinutes %60) min ago </span>
+                                                }
+                                                else if ((int)(now - item.Date).TotalMinutes % 60 > 0)
+                                                {
+                                                    <span class="date">@((int)(now - item.Date).TotalMinutes % 60) min ago</span>
+                                                }
+                                                else{
+                                                    <span class="date">@((int)(now - item.Date).TotalSeconds) second ago</span>
+
+                                                }
+
+                                                </div>
+                                                <div class="timeline-body" style="background-color:#dee2e6">
+                                                    <div class="timeline-header">
+                                                        <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""></span>
+                                                        <span class="username">
+                                                            <a href="javascript:;">
+                                                            @if (!User.IsInRole("Manager"))
+                                                                    {
+                                                                        if (item.IsAnonymous == true)
+                                                                        {
+                                                                            @ViewBag.Anonymous
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            @Html.DisplayFor(modelItem => item.User.FirstName)
+                                                                        }
+                                                                    }
+                                                                    else{
+                                                                         @Html.DisplayFor(modelItem => item.User.FirstName)
+                                                                    }
+                                                            </a> <small></small>
+                                                        </span>
+                                                    </div>
+                                                    <div class="timeline-content">
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Content)
+                                                        </p>
+                                                     
+                                                   
+                                 
+                                                        <p class="text-primary">
+                                                            #@Html.DisplayFor(modelItem => item.Category.Name)
+                                                        </p>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="timeline-footer pt-0" style="background-color:#dee2e6">
+                                                        <a href="javascript:;" class="m-r-15 text-inverse-lighter"><i class="fa fa-thumbs-up fa-fw fa-lg m-r-3"></i> Like</a>
+                                                        <a href="javascript:;" class="m-r-15 text-inverse-lighter"><i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike</a>
+                                                        <a href="javascript:;" class="m-r-15 text-inverse-lighter"><i class="fa fa-comments fa-fw fa-lg m-r-3"></i> Comment</a>
+
+                                                    </div>
+
+                                                    <div class="timeline-comment-box" style="background-color:#f2f3f4">
+                                                    @if (item.PostComments != null)
+                                                    {
+                                                        @foreach (var comment in item.PostComments)
+                                                        {
+                                                            <div class="form-control">
+                                                                @if (!User.IsInRole("Manager"))
+                                                                {
+                                                                    @if(comment.IsAnonymous == true){
+                                                                        <p>
+                                                                            @ViewBag.Anonymous: @comment.Content
+                                                                        </p>
+
+                                                                    }
+                                                                    else{
+                                                                        <p>@comment.User.FirstName: @comment.Content</p>
+
+                                                                    }
+                                                                }
+                                                                else{
+                                                                <p>@comment.User.FirstName: @comment.Content</p>
+
+                                                                }
+                                                  
+                                                                <hr>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    <br />
+                                                    <br />
+                                                        <div class="user"><img src="https://bootdey.com/img/Content/avatar/avatar3.png"></div>
+                                                        <div class="input pb-4">
+                                                            <form>
+                                                                <div class="input-group">
+                                                                   
+                                                            
+                                                               
+                                                                <textarea class="form-control" placeholder="Write a comment..." id="commentContent_@item.Id" name="text" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                                                                    <span class="input-group-btn p-l-10">
+
+                                                                    <button class="btn btn-primary f-s-12 rounded-corner" id="btn_comment_@item.Id" type="button">Comment</button>
+
+                                                                    </span>
+                                                                    <p id="postId" style="display:none">@item.Id</p>
+                                                                </div>
+                                                                <div class="">
+                                                                    <label class="form-check-label"  style="position:absolute">
+                                                                        Anonymous Comment
+                                                                    </label>
+                                                                <input type="checkbox" class="form-check-input" id="anonymousComment_@item.Id" value="Anonymous">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </li>
+                                            }
+                                       
+                                      
+                                    </ul>
+                                    <div>
+                                        <br />
+                                        <br />
+                                        <br />
+                 
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+
+    <script type="text/javascript">
+
+    </script>
+</body>
+</html>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#btn_submitpost").click(function () {
+            btn_submitpost();
+        });
+        $("button[id^='btn_comment_']").click(function () {
+            var postId = $(this).attr("id").split("_")[2];
+
+            btn_comment(postId);
+        });
+    });
+    function btn_submitpost() {
+        var postContent = $("#postContent").val();
+        var isAnonymous = $("#anonymousPost").is(":checked");
+        var categoryName = $("#categoryName").val();
+
+
+        var postModel = {
+            IsAnonymous: isAnonymous,
+            Content: postContent,
+            CategoryName: categoryName
+        };
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/User/Posts/CreatePost",
+            data: postModel,    // multiple data sent using ajax
+            success: function (data) {
+                alert("Posted");
+                setTimeout(function () {
+                    window.location.href = "/User/Posts/Index";
+                }, 1000);
+            }
+        });
+    }
+    function btn_comment(postId) {
+        var commentContent = $("#commentContent_" + postId).val();
+        var anonymousComment = $("#anonymousComment_"+postId).is(":checked");
+
+        var postCommentModel = {
+            Content: commentContent,
+            IsAnonymous: anonymousComment,
+            PostId: postId
+        };
+        $.ajax({
+            type: "GET", // GET / POST / DELETE
+            cache: false,
+            url: "/User/Posts/CreatePostComment",
+            data: postCommentModel,    // multiple data sent using ajax
+            success: function (data) {
+                alert("Posted");
+                setTimeout(function () {
+                    window.location.href = "/User/Posts/Index";
+                }, 1000);
+            }
+        });
+    }
+    
+</script>
+
+                                    

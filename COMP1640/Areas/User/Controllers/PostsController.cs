@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using COMP1640.Data;
 using COMP1640.Models;
+using System.Xml.Linq;
+using System.Security.Claims;
+using System.Net.WebSockets;
+using COMP1640.ViewModels.Response;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -21,142 +25,63 @@ namespace COMP1640.Areas.User.Controllers
         }
 
         // GET: User/Posts
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Posts.Include(p => p.Category).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: User/Posts/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var postModel = await _context.Posts
+        public  async Task<IActionResult> Index()
+         {
+            var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (postModel == null)
+             // .Include(p => p.PostComments)
+             // .Include(p => p.PostInteracts)
+                .ToListAsync();
+            ViewBag.Anonymous = "Anonymous";
+
+            ViewBag.ListCategoryName =  _context.Categories.Select(c => c.Name).ToList();
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            var result = posts.OrderByDescending(p => p.Date).ToList();
+
+            foreach (var item in result)
             {
-                return NotFound();
+                var comments = await _context.PostComments.Where(p => p.PostId == item.Id).ToListAsync();
+                if(comments.Count != 0 )
+                {
+                    item.PostComments = new List<PostCommentModel>();
+                    foreach (var comment in comments)
+                    {
+                        item.PostComments.Add(comment);
+                    }
+                }
             }
 
-            return View(postModel);
+            return View(result);
         }
 
-        // GET: User/Posts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
-        }
-
-        // POST: User/Posts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Date,IsApproved,CategoryId,UserId")] PostModel postModel)
-        {
+            postModel.Date =  DateTime.Now;
+            postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
             if (ModelState.IsValid)
             {
                 _context.Add(postModel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", postModel.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", postModel.UserId);
-            return View(postModel);
+
+            return Json(new UserReponseManager { Message = "Some thing wrong ..." });
         }
-
-        // GET: User/Posts/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> CreatePostComment([Bind("Content,Date,IsAnonymous,PostId")] PostCommentModel postCommentModel)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var postModel = await _context.Posts.FindAsync(id);
-            if (postModel == null)
-            {
-                return NotFound();
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", postModel.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", postModel.UserId);
-            return View(postModel);
-        }
-
-        // POST: User/Posts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Content,Date,IsApproved,CategoryId,UserId")] PostModel postModel)
-        {
-            if (id != postModel.Id)
-            {
-                return NotFound();
-            }
-
+            postCommentModel.Date = DateTime.Now;
+            postCommentModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(postModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostModelExists(postModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", postModel.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", postModel.UserId);
-            return View(postModel);
-        }
-
-        // GET: User/Posts/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                _context.Add(postCommentModel);
+                await _context.SaveChangesAsync();
+                return Ok();
             }
 
-            var postModel = await _context.Posts
-                .Include(p => p.Category)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (postModel == null)
-            {
-                return NotFound();
-            }
+            return Json(new UserReponseManager { Message = "Some thing wrong ..." });
 
-            return View(postModel);
-        }
-
-        // POST: User/Posts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var postModel = await _context.Posts.FindAsync(id);
-            _context.Posts.Remove(postModel);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool PostModelExists(string id)
