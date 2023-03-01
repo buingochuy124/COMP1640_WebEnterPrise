@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace COMP1640.Migrations
 {
-    public partial class init : Migration
+    public partial class a : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,8 @@ namespace COMP1640.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    IsActive = table.Column<bool>(nullable: false)
+                    IsActive = table.Column<bool>(nullable: false),
+                    FinalClosureDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -223,6 +224,7 @@ namespace COMP1640.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     PostId = table.Column<string>(nullable: true),
                     IsAnonymous = table.Column<bool>(nullable: false),
@@ -278,10 +280,10 @@ namespace COMP1640.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "101", "e4bdac1a-6d52-456f-b293-a03c21bfca5a", "Admin", "ADMIN" },
-                    { "102", "21043f57-062e-4309-861c-afa7b60d5539", "Coordinator", "COORDINATOR" },
-                    { "103", "917fdd8b-5899-457f-b155-177107563fdd", "Manager", "MANAGER" },
-                    { "104", "9ea988f2-5066-4d57-97c8-e0d64162f6c2", "Staff", "STAFF" }
+                    { "101", "0f58c3ed-a427-4888-a4ac-b539d70e7a28", "Admin", "ADMIN" },
+                    { "102", "7060ddf5-6fa5-4b9b-91ef-5b2700a50d3c", "Coordinator", "COORDINATOR" },
+                    { "103", "c83e1ef2-b7aa-4c7f-afef-8d38ccbf470d", "Manager", "MANAGER" },
+                    { "104", "a0a0e3ad-858d-4b89-a5d2-2a7de2ff8b6d", "Staff", "STAFF" }
                 });
 
             migrationBuilder.InsertData(
@@ -289,11 +291,11 @@ namespace COMP1640.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "201", 0, null, "161256d1-6052-438c-bcde-8865d47ea3ee", "Admin201@gmail.com", true, "Ngoc Huy", "Bui", false, null, "ADMIN201@GMAIL.COM", "ADMIN201@GMAIL.COM", "AQAAAAEAACcQAAAAEAU517WG4NW2FYvyMLzSsAkt11tO2pmlRCvZwbLvjy64kUs+nLTmJ2fR5cSK4tKBUw==", null, false, "d6cfe634-d7a9-40de-95e7-b92dc26297ce", false, "Admin201@gmail.com" },
-                    { "202", 0, null, "5bb058e4-c468-46de-b6bf-9aba8fa0a56c", "Coordinator205@gmail.com", true, "Thanh Binh", "Phan", false, null, "COORDINATOR205@GMAIL.COM", "COORDINATOR205@GMAIL.COM", "AQAAAAEAACcQAAAAEAXRqBGZfcbbkw5wCgLxmBV7F3Rgmw0CyOQ3ASS1ky9HUFtcRxebUffUgYekmEihrw==", null, false, "ea2ac4f8-da63-458d-b816-aecc028a0dbc", false, "Coordinator202@gmail.com" },
-                    { "203", 0, null, "37d70c6e-481a-4554-88a9-6760f22da943", "Coordinator206@gmail.com", true, "Luan", "Vo", false, null, "COORDINATOR206@GMAIL.COM", "COORDINATOR206@GMAIL.COM", "AQAAAAEAACcQAAAAEC2QYb8m3yU8VXEb3lLSqGB4Llheb1aKO5GaP1rR4VK9RaNReI3Svz2R6ZKwInQ1eQ==", null, false, "d3c85f67-15b3-4521-9c81-5de242bbea69", false, "Coordinator203@gmail.com" },
-                    { "204", 0, null, "c66483a2-8cbd-438d-a091-1dc1eebd1d0f", "Manager203@gmail.com", true, "Nguyen Thanh", "Trung", false, null, "MANAGER203@GMAIL.COM", "MANAGER203@GMAIL.COM", "AQAAAAEAACcQAAAAEOTh2OU/9EuDhPwLqjraFCC3EAj/+ROfHLRTSw1tbIrC/8DK2HclPwdzsdmHkN8vng==", null, false, "7ac35c0b-9d45-4c7a-9804-eda0799c442d", false, "Manager204@gmail.com" },
-                    { "205", 0, null, "fcbda334-e044-4ea8-aa90-1c5e47d7ea7d", "Staff204@gmail.com", true, "Anh", "Tuan", false, null, "STAFF204@GMAIL.COM", "STAFF204@GMAIL.COM", "AQAAAAEAACcQAAAAEOhUewCaR7M7P1O3ebTsbSr6xkogMWueTPha8YXePDM2Fpl6Or3yItlgefPaDFf1Ug==", null, false, "0fb0fb57-e963-4ed8-b89f-c67e49c95b45", false, "Staff205@gmail.com" }
+                    { "201", 0, null, "8b8c0985-f21b-4e58-a826-2dc61646288e", "Admin201@gmail.com", true, "Ngoc Huy", "Bui", false, null, "ADMIN201@GMAIL.COM", "ADMIN201@GMAIL.COM", "AQAAAAEAACcQAAAAENzYq6i1OGIxJl30OwOERIQBsrIGoDlFdkdJsmuLVVdynsHzM/a08KG1taMnCzX6Xg==", null, false, "a622f9be-b009-451d-90c9-ed01b47f76ca", false, "Admin201@gmail.com" },
+                    { "202", 0, null, "d201226a-e227-404c-a26b-d0aae622b623", "Coordinator205@gmail.com", true, "Thanh Binh", "Phan", false, null, "COORDINATOR205@GMAIL.COM", "COORDINATOR205@GMAIL.COM", "AQAAAAEAACcQAAAAEHnT8as3sdaGlFuHctuNTZMvNtox4dx2aD7yQNMx3Z1bCw9ri9TND865vrxWLf8cWw==", null, false, "daf30207-e043-493b-bde9-2f5784b168ee", false, "Coordinator202@gmail.com" },
+                    { "203", 0, null, "760cc6ac-d847-406f-a258-9e8e18f54705", "Coordinator206@gmail.com", true, "Luan", "Vo", false, null, "COORDINATOR206@GMAIL.COM", "COORDINATOR206@GMAIL.COM", "AQAAAAEAACcQAAAAELvgK/J3h2ha01avJTVFRLsG/Bv35v8yEHbrXb43eAlkJR8Ss9m7FNbNRCTaLIVeSw==", null, false, "d3168551-975a-4ced-be31-ba845b8e6592", false, "Coordinator203@gmail.com" },
+                    { "204", 0, null, "71312621-319b-474e-87e0-c57f80b00325", "Manager203@gmail.com", true, "Nguyen Thanh", "Trung", false, null, "MANAGER203@GMAIL.COM", "MANAGER203@GMAIL.COM", "AQAAAAEAACcQAAAAENPLDUEUaBsjveJslm+E3PkDjt5egqashfIBdUtv2KwSiUecdv1CpoIMqx8K0SIILQ==", null, false, "bdb1deb8-a830-4deb-a019-93f606755dcb", false, "Manager204@gmail.com" },
+                    { "205", 0, null, "9a171c89-1383-4a72-bdd1-4621be715236", "Staff204@gmail.com", true, "Anh", "Tuan", false, null, "STAFF204@GMAIL.COM", "STAFF204@GMAIL.COM", "AQAAAAEAACcQAAAAEF1tWg7K3VkkqscrNGZd6gk5yqo3TUTMDoPfqJ6gZdHpBWQGcSqB+cDqLPyEDBFk7g==", null, false, "a5acb3e6-f8b1-4413-b6ec-1697fc3a3b2a", false, "Staff205@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -301,8 +303,8 @@ namespace COMP1640.Migrations
                 columns: new[] { "Id", "CordinatorId", "Name" },
                 values: new object[,]
                 {
-                    { "2defbe43-0f27-4142-8d87-4cc2d7807452", "204", "Biological Sciences" },
-                    { "cabeaf07-fec5-4733-bf39-84bfc377ff97", "205", "Biostatistics" }
+                    { "5e7d5279-5f45-4f54-aa72-7edb471067fc", "204", "Biological Sciences" },
+                    { "34649af1-9d11-44c4-ba89-91aab0d5c216", "205", "Biostatistics" }
                 });
 
             migrationBuilder.InsertData(
