@@ -45,7 +45,7 @@ namespace COMP1640.Data.SeedData
         }
         public static void SeedUsers(ModelBuilder builder)
         {
-            var hasher = new PasswordHasher<AppUserModel>();
+            PasswordHasher<AppUserModel> hasher = new PasswordHasher<AppUserModel>();
 
             builder.Entity<AppUserModel>().HasData(
                 new AppUserModel()

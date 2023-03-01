@@ -2,6 +2,7 @@ using COMP1640.Data;
 using COMP1640.Models;
 using COMP1640.Repository;
 using COMP1640.Repository.IRepository;
+using COMP1640.ViewModels.Response;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -51,11 +52,12 @@ namespace COMP1640
             services.AddControllersWithViews();
 
 
-            services.AddScoped<ICategoriesRepository,CategoriesRepository>();
-            
-            
-            
-            
+            services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+            services.AddScoped<IUsersRepository,UsersRepository>();
+
+
+
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "Cookie";
