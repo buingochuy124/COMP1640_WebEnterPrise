@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using COMP1640.Repository.IRepository;
 
 namespace COMP1640.Areas.Identity.Pages.Account
 {
@@ -24,17 +25,21 @@ namespace COMP1640.Areas.Identity.Pages.Account
 		private readonly UserManager<AppUserModel> _userManager;
 		private readonly ILogger<RegisterModel> _logger;
 		private readonly IEmailSender _emailSender;
+        private readonly ISendEmail _sendEmail;
 
-		public RegisterModel(
+
+        public RegisterModel(
 			UserManager<AppUserModel> userManager,
 			SignInManager<AppUserModel> signInManager,
 			ILogger<RegisterModel> logger,
-			IEmailSender emailSender)
+			IEmailSender emailSender,
+			ISendEmail sendEmail)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_logger = logger;
 			_emailSender = emailSender;
+			_sendEmail = sendEmail;
 		}
 
 		[BindProperty]
@@ -102,8 +107,10 @@ namespace COMP1640.Areas.Identity.Pages.Account
 						values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
 						protocol: Request.Scheme);
 
-					await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    _sendEmail.SendEMail(Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                    
 
 					if (_userManager.Options.SignIn.RequireConfirmedAccount)
 					{
