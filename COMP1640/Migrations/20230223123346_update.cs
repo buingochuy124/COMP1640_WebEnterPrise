@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace COMP1640.Migrations
 {
-    public partial class init : Migration
+    public partial class update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,6 +18,19 @@ namespace COMP1640.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Department",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    CordinatorId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Department", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,11 +68,18 @@ namespace COMP1640.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     Address = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    DepartmentId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Department_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Department",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,25 +101,6 @@ namespace COMP1640.Migrations
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Department",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    CordinatorId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_Users_CordinatorId",
-                        column: x => x.CordinatorId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,6 +224,7 @@ namespace COMP1640.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     PostId = table.Column<string>(nullable: true),
                     IsAnonymous = table.Column<bool>(nullable: false),
@@ -274,35 +276,33 @@ namespace COMP1640.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "101", "e4bdac1a-6d52-456f-b293-a03c21bfca5a", "Admin", "ADMIN" },
-                    { "102", "21043f57-062e-4309-861c-afa7b60d5539", "Coordinator", "COORDINATOR" },
-                    { "103", "917fdd8b-5899-457f-b155-177107563fdd", "Manager", "MANAGER" },
-                    { "104", "9ea988f2-5066-4d57-97c8-e0d64162f6c2", "Staff", "STAFF" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[,]
-                {
-                    { "201", 0, null, "161256d1-6052-438c-bcde-8865d47ea3ee", "Admin201@gmail.com", true, "Ngoc Huy", "Bui", false, null, "ADMIN201@GMAIL.COM", "ADMIN201@GMAIL.COM", "AQAAAAEAACcQAAAAEAU517WG4NW2FYvyMLzSsAkt11tO2pmlRCvZwbLvjy64kUs+nLTmJ2fR5cSK4tKBUw==", null, false, "d6cfe634-d7a9-40de-95e7-b92dc26297ce", false, "Admin201@gmail.com" },
-                    { "202", 0, null, "5bb058e4-c468-46de-b6bf-9aba8fa0a56c", "Coordinator205@gmail.com", true, "Thanh Binh", "Phan", false, null, "COORDINATOR205@GMAIL.COM", "COORDINATOR205@GMAIL.COM", "AQAAAAEAACcQAAAAEAXRqBGZfcbbkw5wCgLxmBV7F3Rgmw0CyOQ3ASS1ky9HUFtcRxebUffUgYekmEihrw==", null, false, "ea2ac4f8-da63-458d-b816-aecc028a0dbc", false, "Coordinator202@gmail.com" },
-                    { "203", 0, null, "37d70c6e-481a-4554-88a9-6760f22da943", "Coordinator206@gmail.com", true, "Luan", "Vo", false, null, "COORDINATOR206@GMAIL.COM", "COORDINATOR206@GMAIL.COM", "AQAAAAEAACcQAAAAEC2QYb8m3yU8VXEb3lLSqGB4Llheb1aKO5GaP1rR4VK9RaNReI3Svz2R6ZKwInQ1eQ==", null, false, "d3c85f67-15b3-4521-9c81-5de242bbea69", false, "Coordinator203@gmail.com" },
-                    { "204", 0, null, "c66483a2-8cbd-438d-a091-1dc1eebd1d0f", "Manager203@gmail.com", true, "Nguyen Thanh", "Trung", false, null, "MANAGER203@GMAIL.COM", "MANAGER203@GMAIL.COM", "AQAAAAEAACcQAAAAEOTh2OU/9EuDhPwLqjraFCC3EAj/+ROfHLRTSw1tbIrC/8DK2HclPwdzsdmHkN8vng==", null, false, "7ac35c0b-9d45-4c7a-9804-eda0799c442d", false, "Manager204@gmail.com" },
-                    { "205", 0, null, "fcbda334-e044-4ea8-aa90-1c5e47d7ea7d", "Staff204@gmail.com", true, "Anh", "Tuan", false, null, "STAFF204@GMAIL.COM", "STAFF204@GMAIL.COM", "AQAAAAEAACcQAAAAEOhUewCaR7M7P1O3ebTsbSr6xkogMWueTPha8YXePDM2Fpl6Or3yItlgefPaDFf1Ug==", null, false, "0fb0fb57-e963-4ed8-b89f-c67e49c95b45", false, "Staff205@gmail.com" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Department",
                 columns: new[] { "Id", "CordinatorId", "Name" },
                 values: new object[,]
                 {
-                    { "2defbe43-0f27-4142-8d87-4cc2d7807452", "204", "Biological Sciences" },
-                    { "cabeaf07-fec5-4733-bf39-84bfc377ff97", "205", "Biostatistics" }
+                    { "999", "202", "Biological Sciences" },
+                    { "998", "203", "Biostatistics" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "101", "2042e95a-ce6e-43d0-ac2b-4ac6494e25db", "Admin", "ADMIN" },
+                    { "102", "c92cd06c-c773-48db-b321-1ed64f50f648", "Coordinator", "COORDINATOR" },
+                    { "103", "5901d892-0cca-43c3-9d52-4c49700b22ad", "Manager", "MANAGER" },
+                    { "104", "cb42955b-b54a-4525-9b75-f225c5bc9116", "Staff", "STAFF" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "201", 0, null, "a1bd4787-bc6d-4e59-9428-edb4e0f69fec", null, "Admin201@gmail.com", true, "Ngoc Huy", "Bui", false, null, "ADMIN201@GMAIL.COM", "ADMIN201@GMAIL.COM", "AQAAAAEAACcQAAAAEO4Z4qHiA0OzdBj+3FQ1PnYvLX/uNXofxH1v4YyleMH1Wc6OVzeoifeQ/7VvYC+sSg==", null, false, "f66898b8-a6ca-497b-9eba-0367a12b3bcf", false, "Admin201@gmail.com" },
+                    { "202", 0, null, "7fffd9fb-f998-4d93-a074-791b41297063", null, "Coordinator205@gmail.com", true, "Thanh Binh", "Phan", false, null, "COORDINATOR205@GMAIL.COM", "COORDINATOR205@GMAIL.COM", "AQAAAAEAACcQAAAAEIdN9yJbHGm0VZWcsqNcFz89GQIvNTLsnMALTEcqa8ejuXY19mzjzMQekbs1q00dvg==", null, false, "c4d312b6-dcab-40aa-84e8-c6409d5f627f", false, "Coordinator202@gmail.com" },
+                    { "203", 0, null, "8fd843f0-c99e-4846-ab13-1d8af2c75d52", null, "Coordinator206@gmail.com", true, "Luan", "Vo", false, null, "COORDINATOR206@GMAIL.COM", "COORDINATOR206@GMAIL.COM", "AQAAAAEAACcQAAAAEExqSKXuG0Zzkw8snnQ5/VJjyVMaCp2a9qhEWv6lzG0++xghI6AUUZ8+Ze+om8MomQ==", null, false, "8db0e192-c799-4271-9ea3-8cf61c44748c", false, "Coordinator203@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -317,18 +317,34 @@ namespace COMP1640.Migrations
                     { "201", "103" },
                     { "202", "103" },
                     { "203", "103" },
-                    { "204", "103" },
                     { "201", "104" },
                     { "202", "104" },
-                    { "203", "104" },
-                    { "204", "104" },
-                    { "205", "104" }
+                    { "203", "104" }
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Department_CordinatorId",
-                table: "Department",
-                column: "CordinatorId");
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "Address", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "205", 0, null, "83e2242d-ab6e-4c6d-a678-7d7d0e392096", "999", "Staff204@gmail.com", true, "Anh", "Tuan", false, null, "STAFF204@GMAIL.COM", "STAFF204@GMAIL.COM", "AQAAAAEAACcQAAAAEAkPZhe/OAqWkZK5N2LJ00GjgWJAvMWe2wIuYkMUQoXNSTPz5DIRH9uP/vDcvLF1bA==", null, false, "e5733e47-7163-48b5-8498-85901bbc5649", false, "Staff205@gmail.com" },
+                    { "204", 0, null, "b7bd3b61-6217-46ed-9982-662185e0e298", "998", "Manager203@gmail.com", true, "Nguyen Thanh", "Trung", false, null, "MANAGER203@GMAIL.COM", "MANAGER203@GMAIL.COM", "AQAAAAEAACcQAAAAECqcfdgcJdvE+Bo+7xjmkcsdkJlVDWfq2sc4v85rWLIuLIa7xDUoSnlQ7Fqr8sniAg==", null, false, "9541456b-5d8b-4195-8050-de1b9dd56675", false, "Manager204@gmail.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "205", "104" });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "204", "103" });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "UserId", "RoleId" },
+                values: new object[] { "204", "104" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostComments_PostId",
@@ -388,6 +404,13 @@ namespace COMP1640.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_DepartmentId",
+                table: "Users",
+                column: "DepartmentId",
+                unique: true,
+                filter: "[DepartmentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "Users",
                 column: "NormalizedEmail");
@@ -402,9 +425,6 @@ namespace COMP1640.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Department");
-
             migrationBuilder.DropTable(
                 name: "PostComments");
 
@@ -437,6 +457,9 @@ namespace COMP1640.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Department");
         }
     }
 }

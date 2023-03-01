@@ -88,5 +88,8 @@ namespace COMP1640.Areas.User.Controllers
         {
             return _context.Posts.Any(e => e.Id == id);
         }
+
+
+
     }
 }

@@ -35,6 +35,9 @@ namespace COMP1640.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DepartmentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -83,6 +86,10 @@ namespace COMP1640.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId")
+                        .IsUnique()
+                        .HasFilter("[DepartmentId] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -98,9 +105,7 @@ namespace COMP1640.Migrations
                         {
                             Id = "201",
                             AccessFailedCount = 0,
-
-                            ConcurrencyStamp = "a66f9d9d-7980-4573-a4e1-91ec3985d56b",
-
+                            ConcurrencyStamp = "a1bd4787-bc6d-4e59-9428-edb4e0f69fec",
                             Email = "Admin201@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Ngoc Huy",
@@ -108,11 +113,9 @@ namespace COMP1640.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN201@GMAIL.COM",
                             NormalizedUserName = "ADMIN201@GMAIL.COM",
-
-                            PasswordHash = "AQAAAAEAACcQAAAAEGDss8iU4MbDzcD+f39NDfEqsR8W7AYxjCqSdZu/Y6z/+64FbkONEkBWIS//dCe6Hg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO4Z4qHiA0OzdBj+3FQ1PnYvLX/uNXofxH1v4YyleMH1Wc6OVzeoifeQ/7VvYC+sSg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "389da5ab-5754-47b4-afc4-1a334b4d5315",
-
+                            SecurityStamp = "f66898b8-a6ca-497b-9eba-0367a12b3bcf",
                             TwoFactorEnabled = false,
                             UserName = "Admin201@gmail.com"
                         },
@@ -120,21 +123,17 @@ namespace COMP1640.Migrations
                         {
                             Id = "202",
                             AccessFailedCount = 0,
-
-                            ConcurrencyStamp = "d47c8843-2928-419a-b265-abf683077bc7",
+                            ConcurrencyStamp = "7fffd9fb-f998-4d93-a074-791b41297063",
                             Email = "Coordinator205@gmail.com",
-
                             EmailConfirmed = true,
                             FirstName = "Thanh Binh",
                             LastName = "Phan",
                             LockoutEnabled = false,
-
                             NormalizedEmail = "COORDINATOR205@GMAIL.COM",
                             NormalizedUserName = "COORDINATOR205@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB2w43SRPDwIU2UiS4SWrI6cy+dw7FtNv3dlo6ULz5njodCC1aIZXmUprJaMnQUkjA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIdN9yJbHGm0VZWcsqNcFz89GQIvNTLsnMALTEcqa8ejuXY19mzjzMQekbs1q00dvg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dd968a34-7f91-421d-906c-77b22e5f80ac",
-
+                            SecurityStamp = "c4d312b6-dcab-40aa-84e8-c6409d5f627f",
                             TwoFactorEnabled = false,
                             UserName = "Coordinator202@gmail.com"
                         },
@@ -142,21 +141,17 @@ namespace COMP1640.Migrations
                         {
                             Id = "203",
                             AccessFailedCount = 0,
-
-                            ConcurrencyStamp = "6daf9535-304a-4e9a-923f-d0d2876be48c",
+                            ConcurrencyStamp = "8fd843f0-c99e-4846-ab13-1d8af2c75d52",
                             Email = "Coordinator206@gmail.com",
-
                             EmailConfirmed = true,
                             FirstName = "Luan",
                             LastName = "Vo",
                             LockoutEnabled = false,
-
                             NormalizedEmail = "COORDINATOR206@GMAIL.COM",
                             NormalizedUserName = "COORDINATOR206@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPZjA7gkmaSiHQl2mBfOXOE1U8CbGySNBzqy8bY1hbC5IvvwrOaDzmfGeMRyrPZ3Ew==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEExqSKXuG0Zzkw8snnQ5/VJjyVMaCp2a9qhEWv6lzG0++xghI6AUUZ8+Ze+om8MomQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4ba5d808-3eb7-4e8c-bc01-3a66287bdad0",
-
+                            SecurityStamp = "8db0e192-c799-4271-9ea3-8cf61c44748c",
                             TwoFactorEnabled = false,
                             UserName = "Coordinator203@gmail.com"
                         },
@@ -164,21 +159,18 @@ namespace COMP1640.Migrations
                         {
                             Id = "204",
                             AccessFailedCount = 0,
-
-                            ConcurrencyStamp = "7aa887e7-70c8-4c04-a695-84233311fe58",
+                            ConcurrencyStamp = "b7bd3b61-6217-46ed-9982-662185e0e298",
+                            DepartmentId = "998",
                             Email = "Manager203@gmail.com",
-
                             EmailConfirmed = true,
                             FirstName = "Nguyen Thanh",
                             LastName = "Trung",
                             LockoutEnabled = false,
-
                             NormalizedEmail = "MANAGER203@GMAIL.COM",
                             NormalizedUserName = "MANAGER203@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB99qoT7iCdUykM24iJzdDB/faLF4eEwPk0M7BzEEpMR3TTQekDMDzjnL69WGbvkig==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECqcfdgcJdvE+Bo+7xjmkcsdkJlVDWfq2sc4v85rWLIuLIa7xDUoSnlQ7Fqr8sniAg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "40f747fd-49e9-4379-af0b-cb45190c79ff",
-
+                            SecurityStamp = "9541456b-5d8b-4195-8050-de1b9dd56675",
                             TwoFactorEnabled = false,
                             UserName = "Manager204@gmail.com"
                         },
@@ -186,21 +178,18 @@ namespace COMP1640.Migrations
                         {
                             Id = "205",
                             AccessFailedCount = 0,
-
-                            ConcurrencyStamp = "6d18e397-b5cd-42c5-9d13-580621f2c2fa",
+                            ConcurrencyStamp = "83e2242d-ab6e-4c6d-a678-7d7d0e392096",
+                            DepartmentId = "999",
                             Email = "Staff204@gmail.com",
-
                             EmailConfirmed = true,
                             FirstName = "Anh",
                             LastName = "Tuan",
                             LockoutEnabled = false,
-
                             NormalizedEmail = "STAFF204@GMAIL.COM",
                             NormalizedUserName = "STAFF204@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEALSWwWsYdybFNgJbWjgCOHe/ExM8RQpv4nkyvmnStkIlYZAuXgeCfGFdG+yulDO1Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAkPZhe/OAqWkZK5N2LJ00GjgWJAvMWe2wIuYkMUQoXNSTPz5DIRH9uP/vDcvLF1bA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "61c99594-45a5-42a9-9f9d-99b4bb34e27e",
-
+                            SecurityStamp = "e5733e47-7163-48b5-8498-85901bbc5649",
                             TwoFactorEnabled = false,
                             UserName = "Staff205@gmail.com"
                         });
@@ -230,32 +219,26 @@ namespace COMP1640.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CordinatorId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CordinatorId");
-
                     b.ToTable("Department");
 
                     b.HasData(
                         new
                         {
-
-                            Id = "ceaa33f0-bf3a-415d-8055-2190d0a0a9ca",
-
-                            CordinatorId = "204",
+                            Id = "999",
+                            CordinatorId = "202",
                             Name = "Biological Sciences"
                         },
                         new
                         {
-
-                            Id = "b07d042c-c7c7-4bfc-b9fe-fbe3882530d0",
-
-                            CordinatorId = "205",
+                            Id = "998",
+                            CordinatorId = "203",
                             Name = "Biostatistics"
                         });
                 });
@@ -341,10 +324,8 @@ namespace COMP1640.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("bit");
-
 
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
@@ -392,36 +373,28 @@ namespace COMP1640.Migrations
                         new
                         {
                             Id = "101",
-
-                            ConcurrencyStamp = "be27e28a-2ff5-48b7-93b5-2db800f799c7",
-
+                            ConcurrencyStamp = "2042e95a-ce6e-43d0-ac2b-4ac6494e25db",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "102",
-
-                            ConcurrencyStamp = "c8407c86-ab69-4e7a-a8a7-fef2acfd8aaf",
-
+                            ConcurrencyStamp = "c92cd06c-c773-48db-b321-1ed64f50f648",
                             Name = "Coordinator",
                             NormalizedName = "COORDINATOR"
                         },
                         new
                         {
                             Id = "103",
-
-                            ConcurrencyStamp = "80229a3d-6be5-4f58-a19d-601b6d4e6d2b",
-
+                            ConcurrencyStamp = "5901d892-0cca-43c3-9d52-4c49700b22ad",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = "104",
-
-                            ConcurrencyStamp = "f817ff81-00c7-4068-b7a3-8d4a01044696",
-
+                            ConcurrencyStamp = "cb42955b-b54a-4525-9b75-f225c5bc9116",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         });
@@ -605,17 +578,17 @@ namespace COMP1640.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("COMP1640.Models.DepartmentModel", b =>
+            modelBuilder.Entity("COMP1640.Models.AppUserModel", b =>
                 {
-                    b.HasOne("COMP1640.Models.AppUserModel", "Cordinator")
-                        .WithMany()
-                        .HasForeignKey("CordinatorId");
+                    b.HasOne("COMP1640.Models.DepartmentModel", "Department")
+                        .WithOne("Cordinator")
+                        .HasForeignKey("COMP1640.Models.AppUserModel", "DepartmentId");
                 });
 
             modelBuilder.Entity("COMP1640.Models.PostCommentModel", b =>
                 {
                     b.HasOne("COMP1640.Models.PostModel", "Post")
-                        .WithMany()
+                        .WithMany("PostComments")
                         .HasForeignKey("PostId");
 
                     b.HasOne("COMP1640.Models.AppUserModel", "User")

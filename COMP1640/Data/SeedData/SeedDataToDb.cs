@@ -101,7 +101,7 @@ namespace COMP1640.Data.SeedData
                     FirstName = "Nguyen Thanh",
                     LastName = "Trung",
                     EmailConfirmed = true,
-
+                    DepartmentId = "998"
                 },
                 new AppUserModel()
                 {
@@ -115,7 +115,7 @@ namespace COMP1640.Data.SeedData
                     FirstName = "Anh",
                     LastName = "Tuan",
                     EmailConfirmed = true,
-
+                    DepartmentId= "999"
                 });
           
         }
@@ -124,15 +124,15 @@ namespace COMP1640.Data.SeedData
             builder.Entity<DepartmentModel>().HasData(
                 new DepartmentModel
                 {
-                    Id = Guid.NewGuid().ToString("D"),
+                    Id = "999",
                     Name = "Biological Sciences",
-                    CordinatorId = "204"
+                    CordinatorId = "202"
                 },
                 new DepartmentModel
                 {
-                    Id = Guid.NewGuid().ToString("D"),
+                    Id = "998",
                     Name = "Biostatistics",
-                    CordinatorId = "205"
+                    CordinatorId = "203"
                 });
         }
         public static void SeedUserRoles(ModelBuilder builder)
