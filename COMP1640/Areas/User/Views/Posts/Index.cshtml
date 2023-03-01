@@ -256,7 +256,7 @@
             url: "/User/Posts/CreatePost",
             data: postModel,    // multiple data sent using ajax
             success: function (data) {
-                alert("Posted");
+                alert(data.message);
                 setTimeout(function () {
                     window.location.href = "/User/Posts/Index";
                 }, 1000);

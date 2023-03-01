@@ -20,6 +20,7 @@ namespace COMP1640.Models
         [ForeignKey("Category")]
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public DateTime CategoryClosureDate { get; set; }
 
         public CategoryModel Category {get;set;}
 
