@@ -21,7 +21,8 @@ namespace COMP1640.Repository
             var newCategory = new CategoryModel
             {
                 Id = model.Id,
-                Name = model.Name
+                Name = model.Name,
+                FinalClosureDate = model.FinalClosureDate,
             };
             await _context.Categories.AddAsync(newCategory);
             try
@@ -122,6 +123,7 @@ namespace COMP1640.Repository
                 Id = model.Id,
                 Name = model.Name,
                 IsActive = model.IsActive,
+                FinalClosureDate = model.FinalClosureDate,
             };
             _context.Entry(newCategory).State = EntityState.Modified;
             try
