@@ -278,7 +278,7 @@
             url: "/User/Posts/CreatePostComment",
             data: postCommentModel,    // multiple data sent using ajax
             success: function (data) {
-                alert("Posted");
+                alert(data.message);
                 setTimeout(function () {
                     window.location.href = "/User/Posts/Index";
                 }, 1000);

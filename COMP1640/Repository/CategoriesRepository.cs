@@ -23,6 +23,7 @@ namespace COMP1640.Repository
                 Id = model.Id,
                 Name = model.Name,
                 ClosureDate = model.ClosureDate
+                FinalClosureDate = model.FinalClosureDate,
             };
             await _context.Categories.AddAsync(newCategory);
             try
@@ -124,6 +125,7 @@ namespace COMP1640.Repository
                 Name = model.Name,
                 ClosureDate = model.ClosureDate,
                 IsActive = model.IsActive,
+                FinalClosureDate = model.FinalClosureDate,
             };
             _context.Entry(newCategory).State = EntityState.Modified;
             try
