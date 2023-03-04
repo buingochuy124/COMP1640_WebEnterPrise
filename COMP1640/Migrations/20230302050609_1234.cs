@@ -1,35 +1,28 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace COMP1640.Migrations
 {
-    public partial class init1 : Migration
+    public partial class _1234 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
                 table: "Department",
                 keyColumn: "Id",
-                keyValue: "2defbe43-0f27-4142-8d87-4cc2d7807452");
+                keyValue: "4159ad3d-3a13-4169-a4aa-5ead58f1bdcb");
 
             migrationBuilder.DeleteData(
                 table: "Department",
                 keyColumn: "Id",
-                keyValue: "cabeaf07-fec5-4733-bf39-84bfc377ff97");
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "Date",
-                table: "PostComments",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                keyValue: "af6f62b6-3b1b-404c-a449-5f432940ac9e");
 
             migrationBuilder.InsertData(
                 table: "Department",
                 columns: new[] { "Id", "CordinatorId", "Name" },
                 values: new object[,]
                 {
-                    { "ceaa33f0-bf3a-415d-8055-2190d0a0a9ca", "204", "Biological Sciences" },
-                    { "b07d042c-c7c7-4bfc-b9fe-fbe3882530d0", "205", "Biostatistics" }
+                    { "0090b4be-1875-44af-9db7-5a94c99770fe", "204", "Biological Sciences" },
+                    { "998ae05e-6885-40fb-a944-f91bd3acd1e4", "205", "Biostatistics" }
                 });
 
             migrationBuilder.UpdateData(
@@ -37,63 +30,63 @@ namespace COMP1640.Migrations
                 keyColumn: "Id",
                 keyValue: "101",
                 column: "ConcurrencyStamp",
-                value: "be27e28a-2ff5-48b7-93b5-2db800f799c7");
+                value: "666caa29-dbe3-44cb-badf-e871f458cad7");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "102",
                 column: "ConcurrencyStamp",
-                value: "c8407c86-ab69-4e7a-a8a7-fef2acfd8aaf");
+                value: "03d0f214-59b4-4dbe-a1ca-99480a5835c3");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "103",
                 column: "ConcurrencyStamp",
-                value: "80229a3d-6be5-4f58-a19d-601b6d4e6d2b");
+                value: "893e80c1-b949-4986-98db-f1a91b2001ae");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "104",
                 column: "ConcurrencyStamp",
-                value: "f817ff81-00c7-4068-b7a3-8d4a01044696");
+                value: "7468ae14-b019-44fb-a6e6-1f63b35d9019");
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "201",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "a66f9d9d-7980-4573-a4e1-91ec3985d56b", "AQAAAAEAACcQAAAAEGDss8iU4MbDzcD+f39NDfEqsR8W7AYxjCqSdZu/Y6z/+64FbkONEkBWIS//dCe6Hg==", "389da5ab-5754-47b4-afc4-1a334b4d5315" });
+                values: new object[] { "7a460386-014e-4b75-a404-ba3f7824e907", "AQAAAAEAACcQAAAAEKbUMusApcbZrYYlAlKmxNcAtrpueTCHmV1fo0cBvlWWS7nKVqCnTodEqOHauSjpQQ==", "a43a1392-c892-4724-97b9-8b8c443fff81" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "202",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "d47c8843-2928-419a-b265-abf683077bc7", "AQAAAAEAACcQAAAAEB2w43SRPDwIU2UiS4SWrI6cy+dw7FtNv3dlo6ULz5njodCC1aIZXmUprJaMnQUkjA==", "dd968a34-7f91-421d-906c-77b22e5f80ac" });
+                values: new object[] { "c818603e-3638-4785-af76-5551f2677d22", "AQAAAAEAACcQAAAAEMbjaVNtZMdZ7FhJh45XlmL6Dh5JyzguYTHpE+A4ABYRLgZYqPcSDaopqLDImygt4A==", "7750f47b-e355-4b82-8565-9fb95e2b2eba" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "203",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "6daf9535-304a-4e9a-923f-d0d2876be48c", "AQAAAAEAACcQAAAAEPZjA7gkmaSiHQl2mBfOXOE1U8CbGySNBzqy8bY1hbC5IvvwrOaDzmfGeMRyrPZ3Ew==", "4ba5d808-3eb7-4e8c-bc01-3a66287bdad0" });
+                values: new object[] { "6c948ab1-3e7e-46ef-b68e-2cd008f7f126", "Default@123", "16d60277-2b00-41c0-aa68-2ae4f959958c" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "204",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "7aa887e7-70c8-4c04-a695-84233311fe58", "AQAAAAEAACcQAAAAEB99qoT7iCdUykM24iJzdDB/faLF4eEwPk0M7BzEEpMR3TTQekDMDzjnL69WGbvkig==", "40f747fd-49e9-4379-af0b-cb45190c79ff" });
+                values: new object[] { "bdd71c6c-10c5-4323-8b4c-f6b3c79d98f3", "AQAAAAEAACcQAAAAEFCCAlRSSEIEYl8WnJg205mDE52epKdLywB9jDVfGtEtZVGNrpQP81TxaPTZZ81oYw==", "9ff73b7c-da17-45ee-be64-aa8f1880c1a1" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "205",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "6d18e397-b5cd-42c5-9d13-580621f2c2fa", "AQAAAAEAACcQAAAAEALSWwWsYdybFNgJbWjgCOHe/ExM8RQpv4nkyvmnStkIlYZAuXgeCfGFdG+yulDO1Q==", "61c99594-45a5-42a9-9f9d-99b4bb34e27e" });
+                values: new object[] { "6c19eca0-2301-4dd3-9d2d-686fae8cca4d", "AQAAAAEAACcQAAAAENRG9U12qf6lPjnwaEYhhb9QHZ6pEVlRwt88U7RMV6NMfzIMpr1NAJ4AHpXeGdG1Yw==", "06e5ed35-f735-4de1-b1d2-33112f538412" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -101,24 +94,20 @@ namespace COMP1640.Migrations
             migrationBuilder.DeleteData(
                 table: "Department",
                 keyColumn: "Id",
-                keyValue: "b07d042c-c7c7-4bfc-b9fe-fbe3882530d0");
+                keyValue: "0090b4be-1875-44af-9db7-5a94c99770fe");
 
             migrationBuilder.DeleteData(
                 table: "Department",
                 keyColumn: "Id",
-                keyValue: "ceaa33f0-bf3a-415d-8055-2190d0a0a9ca");
-
-            migrationBuilder.DropColumn(
-                name: "Date",
-                table: "PostComments");
+                keyValue: "998ae05e-6885-40fb-a944-f91bd3acd1e4");
 
             migrationBuilder.InsertData(
                 table: "Department",
                 columns: new[] { "Id", "CordinatorId", "Name" },
                 values: new object[,]
                 {
-                    { "2defbe43-0f27-4142-8d87-4cc2d7807452", "204", "Biological Sciences" },
-                    { "cabeaf07-fec5-4733-bf39-84bfc377ff97", "205", "Biostatistics" }
+                    { "af6f62b6-3b1b-404c-a449-5f432940ac9e", "204", "Biological Sciences" },
+                    { "4159ad3d-3a13-4169-a4aa-5ead58f1bdcb", "205", "Biostatistics" }
                 });
 
             migrationBuilder.UpdateData(
@@ -126,63 +115,63 @@ namespace COMP1640.Migrations
                 keyColumn: "Id",
                 keyValue: "101",
                 column: "ConcurrencyStamp",
-                value: "e4bdac1a-6d52-456f-b293-a03c21bfca5a");
+                value: "7f2a0faf-fcd9-4e38-9076-a110c1d66664");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "102",
                 column: "ConcurrencyStamp",
-                value: "21043f57-062e-4309-861c-afa7b60d5539");
+                value: "87b1322a-2219-44d6-b2a3-1b49c991c905");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "103",
                 column: "ConcurrencyStamp",
-                value: "917fdd8b-5899-457f-b155-177107563fdd");
+                value: "a03a3184-0145-42cf-a2c2-0581c4ed54b6");
 
             migrationBuilder.UpdateData(
                 table: "Roles",
                 keyColumn: "Id",
                 keyValue: "104",
                 column: "ConcurrencyStamp",
-                value: "9ea988f2-5066-4d57-97c8-e0d64162f6c2");
+                value: "386c7891-ac11-46be-9548-ead0caa2679d");
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "201",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "161256d1-6052-438c-bcde-8865d47ea3ee", "AQAAAAEAACcQAAAAEAU517WG4NW2FYvyMLzSsAkt11tO2pmlRCvZwbLvjy64kUs+nLTmJ2fR5cSK4tKBUw==", "d6cfe634-d7a9-40de-95e7-b92dc26297ce" });
+                values: new object[] { "1e1b4d30-8ee9-4056-a64e-b18220e346c0", "AQAAAAEAACcQAAAAEKwHN1UCacbBUTHfswwZMG1I7zAjVv87s+YclkLknVSvN1y7vaM+WuPyep9cfNVmKg==", "ece8a27a-149f-411e-88fb-16f43fede30e" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "202",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "5bb058e4-c468-46de-b6bf-9aba8fa0a56c", "AQAAAAEAACcQAAAAEAXRqBGZfcbbkw5wCgLxmBV7F3Rgmw0CyOQ3ASS1ky9HUFtcRxebUffUgYekmEihrw==", "ea2ac4f8-da63-458d-b816-aecc028a0dbc" });
+                values: new object[] { "31502ae7-60f1-4470-bc14-a03a83b8b36f", "AQAAAAEAACcQAAAAECcJ0rK0aUS4s1GD3w5mnB7D9gfSuIWB8hmDbEdVaY7wrMMQXu7DY5llfROYbGa+ww==", "03219d5e-887b-4df2-bd67-a13e7fcb6c54" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "203",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "37d70c6e-481a-4554-88a9-6760f22da943", "AQAAAAEAACcQAAAAEC2QYb8m3yU8VXEb3lLSqGB4Llheb1aKO5GaP1rR4VK9RaNReI3Svz2R6ZKwInQ1eQ==", "d3c85f67-15b3-4521-9c81-5de242bbea69" });
+                values: new object[] { "b3e54b18-ebdb-407f-9b44-9e10719766de", "AQAAAAEAACcQAAAAEPVx3lhmSb2T95ZWHqKKx6Off0bg0bngyzW2iHOX275/M0fbsdhJk4H3g9HPOJBi5w==", "f05d7577-f02b-47a0-9e0f-1ce2f9026171" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "204",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "c66483a2-8cbd-438d-a091-1dc1eebd1d0f", "AQAAAAEAACcQAAAAEOTh2OU/9EuDhPwLqjraFCC3EAj/+ROfHLRTSw1tbIrC/8DK2HclPwdzsdmHkN8vng==", "7ac35c0b-9d45-4c7a-9804-eda0799c442d" });
+                values: new object[] { "30f0e306-747f-41c7-a3b3-70c78bc67ce1", "AQAAAAEAACcQAAAAEJkEtW07BEwee2vi7s8sAwKO28Pr/Gg+cKLZUlmkBt7nCTMnHQPCKn5JXLNegGa+pA==", "052a407f-50d0-4365-8cbb-6f6ffba3d2dc" });
 
             migrationBuilder.UpdateData(
                 table: "Users",
                 keyColumn: "Id",
                 keyValue: "205",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "fcbda334-e044-4ea8-aa90-1c5e47d7ea7d", "AQAAAAEAACcQAAAAEOhUewCaR7M7P1O3ebTsbSr6xkogMWueTPha8YXePDM2Fpl6Or3yItlgefPaDFf1Ug==", "0fb0fb57-e963-4ed8-b89f-c67e49c95b45" });
+                values: new object[] { "42fff615-6333-4464-945e-bf5c4697eb0a", "AQAAAAEAACcQAAAAENsucUz/OkLjQrUqVDnGe2tdUhZPpE/I4aAjz60/NnmMuKNj1xXQ4Q+xdwwRgu773w==", "8f9c5a1e-1c58-4879-84fc-60e5ecaf42de" });
         }
     }
 }

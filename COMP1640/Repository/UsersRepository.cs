@@ -21,10 +21,11 @@ namespace COMP1640.Repository
             _context = context;
             _userManager = userManager;
         }
+
+       
         public async Task<UserReponseManager> CreateUser(UserViewModel userViewModel)
         {
             PasswordHasher<AppUserModel> hasher = new PasswordHasher<AppUserModel>();
-            var password = userViewModel.Password;
             var user = new AppUserModel()
             {
                 UserName = userViewModel.UserName,
@@ -37,10 +38,13 @@ namespace COMP1640.Repository
                 LastName = userViewModel.LastName,
                 EmailConfirmed = true,
             };
-            _context.Add(user);
+            var a = await _userManager.CreateAsync(user, userViewModel.Password);
+
             try
             {
-               await  _context.SaveChangesAsync();
+
+                var newUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == user.Email);
+                var b = AddRoleToUser(newUser,userViewModel.RolesName);
             }
             catch (Exception)
             {
@@ -50,10 +54,8 @@ namespace COMP1640.Repository
                     IsSuccess = false,
                     Message = "Some thing wrong, try again ..."
 
-                };       
+                };
             }
-
-            await  _userManager.AddToRoleAsync(user,userViewModel.RolesName);
             return new UserReponseManager
             {
                 IsSuccess = true,
@@ -61,7 +63,11 @@ namespace COMP1640.Repository
 
             };
         }
-
+        public async Task<IdentityResult> AddRoleToUser(AppUserModel user,string roleName)
+        {
+            var result  = await  _userManager.AddToRoleAsync(user, roleName);
+            return result;
+        }
         public async Task<AppUserModel> GetUser(string id)
         {
             
@@ -72,8 +78,7 @@ namespace COMP1640.Repository
 
         public async Task<List<AppUserModel>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            return users;        
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<UserReponseManager> UpdateUser(AppUserModel model)

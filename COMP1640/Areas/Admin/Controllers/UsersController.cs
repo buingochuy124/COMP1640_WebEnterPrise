@@ -69,6 +69,9 @@ namespace COMP1640.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _usersRepository.GetUser(id);
+            var roles = _context.Roles.ToList();
+            var rolesName = roles.Select(r => r.Name).ToList();
+            ViewBag.RolesName = rolesName;
             return View(user);
 
         }
@@ -78,7 +81,7 @@ namespace COMP1640.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Address,FirstName,LastName,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] AppUserModel appUserModel)
+        public async Task<IActionResult> Edit(string id, [Bind("Address,FirstName,LastName,UserName,Email, PhoneNumber, RolesName")] AppUserModel appUserModel)
         {
             var result = await _usersRepository.UpdateUser(appUserModel);   
             return View(appUserModel);

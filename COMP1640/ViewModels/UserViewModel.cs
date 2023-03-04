@@ -1,4 +1,6 @@
-﻿namespace COMP1640.ViewModels
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace COMP1640.ViewModels
 {
     public class UserViewModel
     {
@@ -11,4 +13,5 @@
         public string PhoneNumber {get;set;}
         public string RolesName { get; set; }
     }
+    
 }

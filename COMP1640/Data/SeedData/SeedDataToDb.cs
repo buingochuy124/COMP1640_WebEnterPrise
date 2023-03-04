@@ -82,7 +82,7 @@ namespace COMP1640.Data.SeedData
                      NormalizedUserName = "Coordinator206@gmail.com".ToUpper(),
                      Email = "Coordinator206@gmail.com",
                      NormalizedEmail = "Coordinator206@gmail.com".ToUpper(),
-                     PasswordHash = hasher.HashPassword(null, "Default@123"),
+                     PasswordHash =  "Default@123",
                      SecurityStamp = Guid.NewGuid().ToString("D"),
                      FirstName = "Luan",
                      LastName = "Vo",
