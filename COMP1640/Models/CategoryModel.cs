@@ -12,6 +12,7 @@ namespace COMP1640.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsActive﻿ { get; set; }
+        public DateTime ClosureDate { get; set; }
         public DateTime FinalClosureDate { get; set; }
 
         [NotMapped]

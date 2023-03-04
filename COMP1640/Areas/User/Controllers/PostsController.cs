@@ -60,11 +60,17 @@ namespace COMP1640.Areas.User.Controllers
             postModel.Date =  DateTime.Now;
             postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
-            if (ModelState.IsValid)
+            postModel.CategoryClosureDate = _context.Categories.FirstOrDefault(c => c.Id == postModel.CategoryId).ClosureDate;
+            var category = _context.Categories.SingleOrDefault(c => c.Name == postModel.CategoryName);
+            if (category.ClosureDate < DateTime.Now)
             {
-                _context.Add(postModel);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return Json(new UserReponseManager { Message = "This category has expired" });
+            }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(postModel);
+                    await _context.SaveChangesAsync();
+                    return Json(new UserReponseManager { Message = "Posted" });
             }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
