@@ -51,15 +51,8 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <select asp-for="RolesName" class="custom-select mb-1">
-
-            @foreach (var item in ViewBag.RolesName)
-            {
-                 <option value="@item">@item</option>
-
-            }
+          
                
-            </select>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -46,9 +46,7 @@ namespace COMP1640.Areas.Admin.Controllers
         // GET: Admin/Users/Create
         public  IActionResult Create()
         {
-            var roles = _context.Roles.ToList();
-            var rolesName = roles.Select(r => r.Name).ToList();
-            ViewBag.RolesName = rolesName;
+           
 
             return View();
         }
@@ -72,7 +70,14 @@ namespace COMP1640.Areas.Admin.Controllers
             var roles = _context.Roles.ToList();
             var rolesName = roles.Select(r => r.Name).ToList();
             ViewBag.RolesName = rolesName;
-            return View(user);
+            
+            return View(new UserViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+            });
 
         }
 
@@ -81,14 +86,10 @@ namespace COMP1640.Areas.Admin.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Address,FirstName,LastName,UserName,Email, PhoneNumber, RolesName")] AppUserModel appUserModel)
+        public async Task<IActionResult> Edit([Bind("Address,FirstName,LastName,UserName,Email,Password,PhoneNumber,RolesName")] UserViewModel userViewModel)
         {
-            var result = await _usersRepository.UpdateUser(appUserModel);   
-            return View(appUserModel);
+            var result = await _usersRepository.UpdateUser(userViewModel, userViewModel.RolesName);
+            return RedirectToAction(nameof(Index));
         }
-
-
-
-      
     }
 }

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace COMP1640.Repository
 {
     public class UsersRepository : IUsersRepository
+
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<AppUserModel> _userManager;
@@ -38,13 +39,12 @@ namespace COMP1640.Repository
                 LastName = userViewModel.LastName,
                 EmailConfirmed = true,
             };
-            var a = await _userManager.CreateAsync(user, userViewModel.Password);
+             _context.Users.Add(user);
 
             try
             {
-
-                var newUser = await _context.Users.SingleOrDefaultAsync(u => u.Email == user.Email);
-                var b = AddRoleToUser(newUser,userViewModel.RolesName);
+                await _context.SaveChangesAsync();
+                 
             }
             catch (Exception)
             {
@@ -56,6 +56,8 @@ namespace COMP1640.Repository
 
                 };
             }
+            await AddRoleToUser(user, Utils.Role.Staff);
+
             return new UserReponseManager
             {
                 IsSuccess = true,
@@ -81,27 +83,73 @@ namespace COMP1640.Repository
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<UserReponseManager> UpdateUser(AppUserModel model)
+        public async Task<UserReponseManager> UpdateUser(UserViewModel model, string roleName)
         {
-            _context.Update(model);
+           
 
-            try
-            {
+            
+                // Get the user from the database
+                var user = await _context.Users.SingleOrDefaultAsync(u =>u.Email==model.Email);
+
+                if (user == null)
+                {
+                    return new UserReponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "User not found."
+                    };
+                }
+
+                // Update the user properties
+                user.Address = model.Address;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.PhoneNumber = model.PhoneNumber;
+
+                // Update the user role
+                var roles = await _userManager.GetRolesAsync(user);
+                var result = await _userManager.RemoveFromRolesAsync(user, roles);
+                if (!result.Succeeded)
+                {
+                    return new UserReponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "Failed to remove user from roles."
+                    };
+                }
+
+                result = await _userManager.AddToRoleAsync(user, roleName);
+                if (!result.Succeeded)
+                {
+                    return new UserReponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "Failed to add user to role."
+                    };
+                }
+
+                // Save changes to the database
+                try
+                {
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    return new UserReponseManager
+                    {
+                        IsSuccess = false,
+                        Message = "Failed to update user."
+                    };
+                }
+
                 return new UserReponseManager
                 {
-                    IsSuccess = false,
-                    Message = "Some thing wrong, try again ..."
+                    IsSuccess = true,
+                    Message = "User updated successfully."
                 };
-            }
-            return new UserReponseManager
-            {
-                IsSuccess = true,
-                Message = "Updated ..."
-            };
+            
+
         }
+
     }
 }
