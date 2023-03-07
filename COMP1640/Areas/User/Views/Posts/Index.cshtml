@@ -3,6 +3,10 @@
     ViewData["Title"] = "Post";
     var now = DateTime.Now;
     List<string> listCategoryName = ViewBag.ListCategoryName;
+    List<PostModel> NotApprovedPosts = ViewBag.NotApprovedPosts;
+    var CurrentPage = ViewBag.CurrentPage;
+    var PostsQuantity =  ViewBag.PostsQuantity;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -35,9 +39,11 @@
                                 <div class="tab-pane fade active show" id="profile-post">
 
                                     <ul class="timeline">
+                                      
                                         <li>
                                        
                                         <div class="timeline-body" style="background-color:#f2f3f4">
+                                         
                                             <div class="input pb-4">
 
                                                 <form asp-action="Create">
@@ -77,7 +83,18 @@
                                             </div>
                                         </div>
                                         </li>
-                                    </ul>
+                                    @if (User.IsInRole("Coordinator"))
+                                    {
+
+                                        <li>
+                                            <div class="timeline-body" >
+                                                <a class="input pb-4" href="/User/Posts/ApprovePosts">
+                                                    List not approved (@NotApprovedPosts.Count) Posts.
+                                                </a>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
                                     <ul class="timeline">
                                        
                                         @foreach (var item in Model)
@@ -201,13 +218,27 @@
                                        
                                       
                                     </ul>
-                                    <div>
-                                        <br />
-                                        <br />
-                                        <br />
-                 
-                                    </div>
-                                </div>
+                                    <ul class="timeline">
+                                        <div class="timeline-body">
+                                                <br />                                   
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">                                                     
+                                                        <li class="page-item"><a class="page-link" href="/User/Posts/Index/?currentPage=1">Previous</a></li>
+                                                        <li class="page-item"><a class="page-link" href="/User/Posts/Index/?currentPage=@(CurrentPage)">@CurrentPage</a></li>
+                                                        @if(PostsQuantity > 5){
+                                                            <li class="page-item"><a class="page-link" href="/User/Posts/Index/?currentPage=@(CurrentPage+1)">@(CurrentPage + 1)</a></li>
+                                                            <li class="page-item"><a class="page-link" href="/User/Posts/Index/?currentPage=@(CurrentPage+2)">@(CurrentPage + 2)</a></li>
+                                                            <li class="page-item"><a class="page-link" href="/User/Posts/Index/?currentPage=@(CurrentPage+1)">Next</a></li>
+                                                        }
+                                                       
+                                                    </ul>
+                                                </nav>                            
+                                            </div>
+                                        </div>
+                                
+                                   </ul>
+                            <br />
+                            <br />
 
                             </div>
 
@@ -218,11 +249,11 @@
             </div>
          </div>
     </div>
+</body>
 
     <script type="text/javascript">
 
     </script>
-</body>
 </html>
 
 
