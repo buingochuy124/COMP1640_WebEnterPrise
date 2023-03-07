@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using COMP1640.Repository.IRepository;
 
 namespace COMP1640.Areas.Identity.Pages.Account
 {
@@ -16,9 +17,11 @@ namespace COMP1640.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<Models.AppUserModel> _userManager;
+        private readonly ISendEmail _sendEmail;
 
-        public ConfirmEmailModel(UserManager<Models.AppUserModel> userManager)
+        public ConfirmEmailModel(ISendEmail sendEmail, UserManager<Models.AppUserModel> userManager)
         {
+            _sendEmail = sendEmail;
             _userManager = userManager;
         }
 
@@ -39,6 +42,9 @@ namespace COMP1640.Areas.Identity.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            _sendEmail.SendEMail("trungntgcd191228@fpt.edu.vn", "Customer's Order", "Order Accpeted");
+
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
             return Page();
