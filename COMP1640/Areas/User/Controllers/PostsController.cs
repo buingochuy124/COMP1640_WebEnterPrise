@@ -28,16 +28,18 @@ namespace COMP1640.Areas.User.Controllers
         }
 
         // GET: User/Posts
-        public  async Task<IActionResult> Index()
+        public  async Task<IActionResult> Index(int currentPage)
          {
+            
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
              // .Include(p => p.PostComments)
              // .Include(p => p.PostInteracts)
                 .ToListAsync();
+            ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
+            posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
-
             ViewBag.ListCategoryName =  _context.Categories.Select(c => c.Name).ToList();
             var role = User.FindFirstValue(ClaimTypes.Role);
             var result = posts.OrderByDescending(p => p.Date).ToList();
@@ -54,8 +56,51 @@ namespace COMP1640.Areas.User.Controllers
                     }
                 }
             }
+            if(currentPage.ToString() == null || currentPage <= 0)
+            {
+                currentPage = 1;
+            }
+          
+            ViewBag.CurrentPage = currentPage;        
+            ViewBag.PostsQuantity = result.Count;
+            ViewBag.PostsPerPage = 5;
 
+
+            result = result.Skip((currentPage - 1) * 2).Take(2).ToList();
             return View(result);
+        }
+        public async Task<IActionResult> ApprovePosts()
+        {
+            var posts = await _context.Posts
+               .Include(p => p.Category)
+               .Include(p => p.User)
+               .Where(p => p.IsApproved == false)
+               // .Include(p => p.PostComments)
+               // .Include(p => p.PostInteracts)
+               .ToListAsync();
+
+            var result = posts.OrderByDescending(p => p.Date).ToList();
+            return View(result);
+
+        }
+        public async Task<IActionResult> ApprovedPost(string id)
+        {
+            var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
+            post.IsApproved = true;
+            _context.Entry(post).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
+        }
+        public async Task<IActionResult> RemovePost(string id)
+        {
+
+            var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
+            post.IsApproved = true;
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
 
         public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
