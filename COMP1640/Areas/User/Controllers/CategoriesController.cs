@@ -14,6 +14,7 @@ using COMP1640.ViewModels;
 namespace COMP1640.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize("RequireAdmin")]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesRepository _categoriesRepository;
@@ -85,7 +86,7 @@ namespace COMP1640.Areas.User.Controllers
                 Id = categoryModel.Id,
                 Name = categoryModel.Name,
                 IsActive = categoryModel.IsActive,
-                ClosureDate = categoryModel.ClosureDate
+                ClosureDate = categoryModel.ClosureDate,
                 FinalClosureDate = categoryModel.FinalClosureDate,
 
             });

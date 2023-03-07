@@ -11,10 +11,13 @@ using System.Xml.Linq;
 using System.Security.Claims;
 using System.Net.WebSockets;
 using COMP1640.ViewModels.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace COMP1640.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize("RequireStaff")]
+
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;

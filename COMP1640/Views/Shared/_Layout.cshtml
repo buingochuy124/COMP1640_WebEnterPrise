@@ -15,29 +15,33 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sidebar">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">COMP1640</a>
+                <a class="navbar-brand" asp-area="User" asp-controller="Home" asp-action="Index">COMP1640</a>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="User" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="User" asp-controller="Posts" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="User" asp-controller="Home" asp-action="Index">About us</a>
+                        </li>
+                        
                         @if (User.IsInRole("Admin")){
+                        
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="User" asp-controller="Posts" asp-action="Index">test</a>
+                                <a class="nav-link text-dark" asp-area="User" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="User" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
                             </li>
                         }
                      
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="User" asp-controller="Posts" asp-action="Index">Post</a>
-                        </li>  
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="User" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
-                            </li>
-                        }
+                      
+                   
                     </ul>
                 </div>
             </div>

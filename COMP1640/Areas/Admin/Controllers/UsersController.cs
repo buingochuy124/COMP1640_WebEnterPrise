@@ -15,8 +15,8 @@ using COMP1640.ViewModels;
 namespace COMP1640.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
-     public class UsersController : Controller
+    [Authorize("RequireAdmin")]
+    public class UsersController : Controller
     {
         private readonly IUsersRepository _usersRepository;
         private readonly ApplicationDbContext _context;

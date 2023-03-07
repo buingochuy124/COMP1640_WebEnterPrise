@@ -22,7 +22,7 @@ namespace COMP1640.Repository
             {
                 Id = model.Id,
                 Name = model.Name,
-                ClosureDate = model.ClosureDate
+                ClosureDate = model.ClosureDate,
                 FinalClosureDate = model.FinalClosureDate,
             };
             await _context.Categories.AddAsync(newCategory);

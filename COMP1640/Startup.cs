@@ -47,6 +47,27 @@ namespace COMP1640
                  );
             services.AddSession();
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdmin", policy =>
+                    policy.RequireRole(Utils.Role.Admin));
+
+                options.AddPolicy("RequireManager", policy =>
+                   policy.RequireRole(Utils.Role.Manager));
+
+
+                options.AddPolicy("RequireStaff", policy =>
+                   policy.RequireRole(Utils.Role.Staff));
+
+
+                options.AddPolicy("RequireCoordinator", policy =>
+                   policy.RequireRole(Utils.Role.Coordinator));
+            });
+
+
+
+
+
             services.AddIdentity<AppUserModel, RoleModel>()
                           .AddDefaultUI()
                           .AddEntityFrameworkStores<ApplicationDbContext>()
