@@ -57,7 +57,8 @@ namespace COMP1640.Areas.User.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] CategoriesViewModel categoryViewModel)
+
+        public async Task<IActionResult> Create([Bind("Id,Name,ClosureDate,FinalClosureDate")] CategoriesViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -84,6 +85,9 @@ namespace COMP1640.Areas.User.Controllers
                 Id = categoryModel.Id,
                 Name = categoryModel.Name,
                 IsActive = categoryModel.IsActive,
+                ClosureDate = categoryModel.ClosureDate
+                FinalClosureDate = categoryModel.FinalClosureDate,
+
             });
         }
 
@@ -92,7 +96,8 @@ namespace COMP1640.Areas.User.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name")] CategoriesViewModel categoryViewModel)
+
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,ClosureDate,FinalClosureDate")] CategoriesViewModel categoryViewModel)
         {
             if (id != categoryViewModel.Id)
             {

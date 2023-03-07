@@ -60,11 +60,17 @@ namespace COMP1640.Areas.User.Controllers
             postModel.Date =  DateTime.Now;
             postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
-            if (ModelState.IsValid)
+            postModel.CategoryClosureDate = _context.Categories.FirstOrDefault(c => c.Id == postModel.CategoryId).ClosureDate;
+            var category = _context.Categories.SingleOrDefault(c => c.Name == postModel.CategoryName);
+            if (category.ClosureDate < DateTime.Now)
             {
-                _context.Add(postModel);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return Json(new UserReponseManager { Message = "This category has expired" });
+            }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(postModel);
+                    await _context.SaveChangesAsync();
+                    return Json(new UserReponseManager { Message = "Posted" });
             }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
@@ -73,12 +79,18 @@ namespace COMP1640.Areas.User.Controllers
         {
             postCommentModel.Date = DateTime.Now;
             postCommentModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (ModelState.IsValid)
+            var post = _context.Posts.SingleOrDefault(p => p.Id == postCommentModel.PostId);
+            var category = _context.Categories.SingleOrDefault(c => c.Name == post.CategoryName);
+            if (category.FinalClosureDate < DateTime.Now)
             {
-                _context.Add(postCommentModel);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return Json(new UserReponseManager { Message = "This post has expired" });
             }
+                if (ModelState.IsValid)
+                {
+                    _context.Add(postCommentModel);
+                    await _context.SaveChangesAsync();
+                    return Json(new UserReponseManager { Message = "Commented" });
+                }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
 
@@ -88,5 +100,8 @@ namespace COMP1640.Areas.User.Controllers
         {
             return _context.Posts.Any(e => e.Id == id);
         }
+
+
+
     }
 }
