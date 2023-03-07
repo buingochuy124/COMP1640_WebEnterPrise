@@ -15,7 +15,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalClosureDate)
+            </th>
             <th></th>
+              @if (User.IsInRole("Admin"))
+                    {
+            <th></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -25,10 +35,25 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                    @Html.DisplayFor(modelItem => item.ClosureDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+             
             </td>
+            <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="DowloadCategory" asp-route-id="@item.Id">Delete</a>
+
+                    }
+            </td>
+               
         </tr>
 }
     </tbody>

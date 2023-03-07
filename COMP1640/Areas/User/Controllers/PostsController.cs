@@ -12,6 +12,9 @@ using System.Security.Claims;
 using System.Net.WebSockets;
 using COMP1640.ViewModels.Response;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -69,6 +72,8 @@ namespace COMP1640.Areas.User.Controllers
             result = result.Skip((currentPage - 1) * 2).Take(2).ToList();
             return View(result);
         }
+
+
         public async Task<IActionResult> ApprovePosts()
         {
             var posts = await _context.Posts
@@ -83,6 +88,7 @@ namespace COMP1640.Areas.User.Controllers
             return View(result);
 
         }
+
         public async Task<IActionResult> ApprovedPost(string id)
         {
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
@@ -92,6 +98,7 @@ namespace COMP1640.Areas.User.Controllers
 
             return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
+
         public async Task<IActionResult> RemovePost(string id)
         {
 
@@ -102,6 +109,26 @@ namespace COMP1640.Areas.User.Controllers
 
             return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
+         public IActionResult UploadCsvFile(IFormFile file, [FromServices] IWebHostEnvironment webHostEnvironment, string categoryName)
+         {
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (file == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
+
+            var fileName = $"{webHostEnvironment.WebRootPath}\\Documents\\{categoryName}_{UserId}.csv";
+            using (FileStream filestream = System.IO.File.Create(fileName))
+            {
+                file.CopyTo(filestream);
+                filestream.Flush();
+            }
+            return RedirectToAction(nameof(Index));
+         }
+
 
         public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
         {
