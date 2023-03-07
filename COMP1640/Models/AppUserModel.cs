@@ -15,6 +15,11 @@ namespace COMP1640.Models
         [NotMapped]
         public List<PostCommentModel> PostComments {get;set;}
 
+        [ForeignKey("Department")]
+        public string DepartmentId { get; set; }
+        public DepartmentModel Department { get; set; }
+       
+
         [NotMapped]
         public List<PostInteractModel> postInteracts {get;set;}  
     }
