@@ -2,7 +2,9 @@ using COMP1640.Data;
 using COMP1640.Models;
 using COMP1640.Repository;
 using COMP1640.Repository.IRepository;
+using COMP1640.ViewModels.Response;
 using COMP1640.ViewModels;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -53,7 +55,12 @@ namespace COMP1640
             services.AddControllersWithViews();
 
 
-            services.AddScoped<ICategoriesRepository,CategoriesRepository>();
+
+            services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+            services.AddScoped<IUsersRepository,UsersRepository>();
+
+
+
 
 
             services.AddTransient<ISendEmail, SendEmail>();
@@ -66,6 +73,7 @@ namespace COMP1640
                 options.Name = Configuration["MailSettings:Name"];
                 options.Sender = Configuration["MailSettings:User"];
             });
+
 
             services.ConfigureApplicationCookie(options =>
             {
