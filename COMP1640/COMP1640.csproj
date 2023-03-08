@@ -16,4 +16,8 @@
     <PackageReference Include="MailKit" Version="3.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Documents\" />
+  </ItemGroup>
+
 </Project>

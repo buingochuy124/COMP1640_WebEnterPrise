@@ -12,6 +12,12 @@ using System.Security.Claims;
 using System.Net.WebSockets;
 using COMP1640.ViewModels.Response;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System.IO.Compression;
+using COMP1640.Repository.IRepository;
+using static System.Net.WebRequestMethods;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -21,10 +27,12 @@ namespace COMP1640.Areas.User.Controllers
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPostRepository _postRepository;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, IPostRepository postRepository)
         {
             _context = context;
+            _postRepository = postRepository;
         }
 
         // GET: User/Posts
@@ -69,6 +77,8 @@ namespace COMP1640.Areas.User.Controllers
             result = result.Skip((currentPage - 1) * 2).Take(2).ToList();
             return View(result);
         }
+
+
         public async Task<IActionResult> ApprovePosts()
         {
             var posts = await _context.Posts
@@ -83,6 +93,7 @@ namespace COMP1640.Areas.User.Controllers
             return View(result);
 
         }
+
         public async Task<IActionResult> ApprovedPost(string id)
         {
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id);
@@ -92,6 +103,7 @@ namespace COMP1640.Areas.User.Controllers
 
             return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
+
         public async Task<IActionResult> RemovePost(string id)
         {
 
@@ -102,6 +114,66 @@ namespace COMP1640.Areas.User.Controllers
 
             return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
+         public IActionResult UploadCsvFile(IFormFile file, [FromServices] IWebHostEnvironment webHostEnvironment, string categoryName)
+         {
+
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (file == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+
+
+            var fileName = $"{webHostEnvironment.WebRootPath}\\Documents\\{categoryName}_{UserId}.csv";
+            using (FileStream filestream = System.IO.File.Create(fileName))
+            {
+                file.CopyTo(filestream);
+                filestream.Flush();
+            }
+            return RedirectToAction(nameof(Index));
+         }
+
+         public IActionResult DownloadFilesInZip([FromServices]  IWebHostEnvironment webHostEnvironment, string categoryId)
+         {
+            string rootFolder = $"{webHostEnvironment.WebRootPath}\\Documents";
+            var categoryName = _context.Categories.SingleOrDefault(c => c.Id == categoryId).Name;
+            var files = Directory.GetFiles(rootFolder).Where(f => Path.GetFileName(f).Contains(categoryName));
+            var memoryStream = new MemoryStream();
+
+
+            var categoryData = _postRepository.GetCategoryData(categoryId);
+            string categoryDataFileName = "CategoryData.csv";
+
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+            {
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file);
+                    var zipEntry = archive.CreateEntry(fileName, CompressionLevel.Fastest);
+
+                    using (var fileStream = new FileStream(file, FileMode.Open))
+                    using (var zipStream = zipEntry.Open())
+                    {
+                        fileStream.CopyTo(zipStream);
+                    }
+                }
+                ZipArchiveEntry entry = archive.CreateEntry(categoryDataFileName);
+
+                using (Stream stream = entry.Open())
+                {
+                    // Write the byte array to the stream
+                    stream.Write(categoryData, 0, categoryData.Length);
+                }
+            }
+
+            var contentType = "application/zip";
+            var zipFileName = $"{categoryName}Document.zip";
+            Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{zipFileName}\"");
+            return File(memoryStream.ToArray(), contentType, zipFileName);
+         }
+
 
         public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
         {

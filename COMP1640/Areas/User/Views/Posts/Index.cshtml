@@ -46,7 +46,8 @@
                                          
                                             <div class="input pb-4">
 
-                                                <form asp-action="Create">
+                                                <form asp-controller="Posts" asp-action="UploadCsvFile" enctype="multipart/form-data">
+
                                                     <div class="input-group">
                                                         <br />
                                                         <br />
@@ -55,11 +56,19 @@
                                                     </div>
                                                     <br />
                                                     <select class="custom-select mb-1" id="categoryName">
+                                                        <option value="default" selected>Select a category</option>
+
                                                         @foreach (var item in listCategoryName)
                                                         {
                                                             <option value="@item">@item</option>
                                                         }
                                                     </select>
+
+                                                    <input value="" style="display:none" name="categoryName"/>
+                                                    
+                                                    <input type="file" name="file" />
+                                                    <hr />
+
 
                                                     <div class= "p-1">
 
@@ -69,10 +78,12 @@
                                                         <input type="checkbox" class="form-check-input" id="anonymousPost" value="Anonymous">
 
                                                     </div>
+
+
                                                     <span class="input-group-btn p-l-10 ">
                                                         <br />
 
-                                                        <button class="btn btn-primary f-s-12 rounded-corner" id="btn_submitpost" type="button">Submit Post</button>
+                                                        <button class="btn btn-primary f-s-12 rounded-corner"  id="btn_submitpost" type="submit">Submit Post</button>
                                                     </span>
                                                     <br />
 
@@ -269,7 +280,17 @@
 
             btn_comment(postId);
         });
+      
     });
+    $(document).ready(function() {
+      $("#categoryName").on("change", function() {
+        var selectedCategory = $("#categoryName").val();
+        $("input:hidden").val(selectedCategory);
+      });
+    });
+   
+
+
     function btn_submitpost() {
         var postContent = $("#postContent").val();
         var isAnonymous = $("#anonymousPost").is(":checked");

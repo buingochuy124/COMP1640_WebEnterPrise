@@ -14,7 +14,7 @@ using COMP1640.ViewModels;
 namespace COMP1640.Areas.User.Controllers
 {
     [Area("User")]
-    [Authorize("RequireAdmin")]
+    [Authorize("RequireManager")]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesRepository _categoriesRepository;

@@ -79,7 +79,7 @@ namespace COMP1640
 
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             services.AddScoped<IUsersRepository,UsersRepository>();
-
+            services.AddScoped<IPostRepository, PostRepository>();
 
 
 

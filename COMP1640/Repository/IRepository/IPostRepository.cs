@@ -6,6 +6,8 @@ namespace COMP1640.Repository.IRepository
     public interface IPostRepository
     {
         public Task<UserReponseManager> CreatePost();
-        
+
+        public byte[] GetCategoryData(string categoryId);
+
     }
 }
