@@ -10,8 +10,7 @@ namespace COMP1640.Models
         public string Id { get; set; }
         public string Name { get; set; }
 
-        [ForeignKey("User")]
         public string CordinatorId { get; set; }
-        public AppUserModel Cordinator { get; set; }
     }
 }
+    

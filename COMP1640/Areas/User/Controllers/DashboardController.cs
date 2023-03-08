@@ -32,9 +32,17 @@ namespace COMP1640.Areas.User.Controllers
             var postCounts = _context.Posts
         .Include(p => p.User)
         .ThenInclude(u => u.Department)
+             .Where(p => p.User.Department != null)
+
         .GroupBy(p => p.User.Department.Name)
         .Select(g => new { Department = g.Key, Count = g.Count() })
         .ToDictionary(x => x.Department, x => x.Count);
+
+
+
+
+
+
             int totalPostCount = _context.Posts.Count();
             int totalDepartmentCount = _context.Department
             .Select(d => d.Name)
