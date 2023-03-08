@@ -35,10 +35,35 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.ClosureDate)
+                    @if (item.FinalClosureDate < DateTime.Now)
+                    {
+                        <p style="color:red;">
+                            @Html.DisplayFor(modelItem => item.ClosureDate)
+
+                        </p>
+                    }
+                    else{
+                        <p style="color:green;">
+                            @Html.DisplayFor(modelItem => item.ClosureDate)
+
+                        </p>
+
+                    }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FinalClosureDate)
+                @if(item.FinalClosureDate < DateTime.Now){
+                    <p style="color:red;">
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+
+                    </p>
+                }
+                else{
+                        <p style="color:green;">
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+
+                        </p>
+
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -47,10 +72,13 @@
              
             </td>
             <td>
-                    @if (User.IsInRole("Admin"))
+                
+                    @if (User.IsInRole("Manager"))
                     {
-                        <a asp-action="DowloadCategory" asp-route-id="@item.Id">Delete</a>
-
+                        @if (item.FinalClosureDate < DateTime.Now)
+                        {
+                            <a href="/User/Posts/DownloadFilesInZip?categoryId=@item.Id">Dowload Category Document</a>
+                        }
                     }
             </td>
                
