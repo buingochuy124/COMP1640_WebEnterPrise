@@ -36,26 +36,26 @@ namespace COMP1640.Areas.User.Controllers
         }
 
         // GET: User/Posts
-        public  async Task<IActionResult> Index(int currentPage)
-         {
-            
+        public async Task<IActionResult> Index(int currentPage)
+        {
+
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
-             // .Include(p => p.PostComments)
-             // .Include(p => p.PostInteracts)
+                // .Include(p => p.PostComments)
+                // .Include(p => p.PostInteracts)
                 .ToListAsync();
             ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
             posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
-            ViewBag.ListCategoryName =  _context.Categories.Select(c => c.Name).ToList();
+            ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
             var role = User.FindFirstValue(ClaimTypes.Role);
             var result = posts.OrderByDescending(p => p.Date).ToList();
 
             foreach (var item in result)
             {
                 var comments = await _context.PostComments.Where(p => p.PostId == item.Id).ToListAsync();
-                if(comments.Count != 0 )
+                if (comments.Count != 0)
                 {
                     item.PostComments = new List<PostCommentModel>();
                     foreach (var comment in comments)
@@ -64,12 +64,12 @@ namespace COMP1640.Areas.User.Controllers
                     }
                 }
             }
-            if(currentPage.ToString() == null || currentPage <= 0)
+            if (currentPage.ToString() == null || currentPage <= 0)
             {
                 currentPage = 1;
             }
-          
-            ViewBag.CurrentPage = currentPage;        
+
+            ViewBag.CurrentPage = currentPage;
             ViewBag.PostsQuantity = result.Count;
             ViewBag.PostsPerPage = 5;
 
@@ -114,8 +114,8 @@ namespace COMP1640.Areas.User.Controllers
 
             return RedirectToAction("ApprovePosts", "Posts", new { area = "User" });
         }
-         public IActionResult UploadCsvFile(IFormFile file, [FromServices] IWebHostEnvironment webHostEnvironment, string categoryName)
-         {
+        public IActionResult UploadCsvFile(IFormFile file, [FromServices] IWebHostEnvironment webHostEnvironment, string categoryName)
+        {
 
             var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -133,10 +133,10 @@ namespace COMP1640.Areas.User.Controllers
                 filestream.Flush();
             }
             return RedirectToAction(nameof(Index));
-         }
+        }
 
-         public IActionResult DownloadFilesInZip([FromServices]  IWebHostEnvironment webHostEnvironment, string categoryId)
-         {
+        public IActionResult DownloadFilesInZip([FromServices] IWebHostEnvironment webHostEnvironment, string categoryId)
+        {
             string rootFolder = $"{webHostEnvironment.WebRootPath}\\Documents";
             var categoryName = _context.Categories.SingleOrDefault(c => c.Id == categoryId).Name;
             var files = Directory.GetFiles(rootFolder).Where(f => Path.GetFileName(f).Contains(categoryName));
@@ -172,12 +172,12 @@ namespace COMP1640.Areas.User.Controllers
             var zipFileName = $"{categoryName}Document.zip";
             Response.Headers.Add("Content-Disposition", $"attachment; filename=\"{zipFileName}\"");
             return File(memoryStream.ToArray(), contentType, zipFileName);
-         }
+        }
 
 
         public async Task<IActionResult> CreatePost([Bind("Content,Date,IsAnonymous,CategoryName")] PostModel postModel)
         {
-            postModel.Date =  DateTime.Now;
+            postModel.Date = DateTime.Now;
             postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
             postModel.CategoryClosureDate = _context.Categories.FirstOrDefault(c => c.Id == postModel.CategoryId).ClosureDate;
@@ -186,11 +186,11 @@ namespace COMP1640.Areas.User.Controllers
             {
                 return Json(new UserReponseManager { Message = "This category has expired" });
             }
-                if (ModelState.IsValid)
-                {
-                    _context.Add(postModel);
-                    await _context.SaveChangesAsync();
-                    return Json(new UserReponseManager { Message = "Posted" });
+            if (ModelState.IsValid)
+            {
+                _context.Add(postModel);
+                await _context.SaveChangesAsync();
+                return Json(new UserReponseManager { Message = "Posted" });
             }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
@@ -205,23 +205,114 @@ namespace COMP1640.Areas.User.Controllers
             {
                 return Json(new UserReponseManager { Message = "This post has expired" });
             }
-                if (ModelState.IsValid)
-                {
-                    _context.Add(postCommentModel);
-                    await _context.SaveChangesAsync();
-                    return Json(new UserReponseManager { Message = "Commented" });
-                }
+            var existingComment = await _context.PostComments.FirstOrDefaultAsync(c => c.PostId == postCommentModel.PostId && c.UserId == postCommentModel.UserId);
+
+            if (existingComment != null)
+            {
+                return Json(new UserReponseManager { Message = "You have already commented on this post" });
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Add(postCommentModel);
+                await _context.SaveChangesAsync();
+                return Json(new UserReponseManager { Message = "Commented" });
+            }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
 
         }
 
-        private bool PostModelExists(string id)
+
+
+        public async Task<IActionResult> Like(string postId)
         {
-            return _context.Posts.Any(e => e.Id == id);
+            var post = await _context.Posts.FindAsync(postId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            // Update the post interact model
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract = await _context.PostInteracts
+                .FirstOrDefaultAsync(pi => pi.PostId == post.Id && pi.UserId == userId);
+
+            if (postInteract == null)
+            {
+                postInteract = new PostInteractModel
+                {
+                    PostId = post.Id,
+                    IsAnonymous = false,
+                    IsInteracted = true,
+                    UserId = userId,
+                    IsLike = true,
+
+                };
+
+                _context.PostInteracts.Add(postInteract);
+            }
+            else if (postInteract.IsLike == false && postInteract.IsInteracted == false) // user already disliked the post
+            {
+                postInteract.IsLike = true;
+                postInteract.IsInteracted = true;
+                _context.PostInteracts.Update(postInteract);
+              
+            }
+            else // user already liked or interacted with the post
+            {
+                return Json(new UserReponseManager { Message = "You have already interacted..." });
+            }
+            ViewBag.PostInteract = postInteract;
+            await _context.SaveChangesAsync();
+            return Json(new UserReponseManager { Message = "Liked" });
+            return Ok(new { postId });
         }
 
 
+        public async Task<IActionResult> disLike(string postId)
+        {
+            var post = await _context.Posts.FindAsync(postId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            // Update the post interact model
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract = await _context.PostInteracts
+                .FirstOrDefaultAsync(pi => pi.PostId == post.Id && pi.UserId == userId);
+
+            if (postInteract == null)
+            {
+                postInteract = new PostInteractModel
+                {
+                    PostId = post.Id,
+                    IsAnonymous = false,
+                    IsInteracted = true,
+                    UserId = userId,
+                    IsLike = false
+                };
+
+                _context.PostInteracts.Add(postInteract);
+            }
+            else if (postInteract.IsLike == true && postInteract.IsInteracted == false) // user already liked the post
+            {
+                postInteract.IsLike = false;
+                postInteract.IsInteracted = true;
+                _context.PostInteracts.Update(postInteract);
+               
+            }
+            else // user already disliked or interacted with the post
+            {
+                return Json(new UserReponseManager { Message = "You have already interacted..." });
+            }
+
+            await _context.SaveChangesAsync();
+            return Json(new UserReponseManager { Message = "DisLiked" });
+            return Ok(new { postId });
+        }
+    }
 
     }
-}
