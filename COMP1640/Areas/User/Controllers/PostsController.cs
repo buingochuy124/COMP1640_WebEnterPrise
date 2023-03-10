@@ -18,6 +18,11 @@ using System.IO;
 using System.IO.Compression;
 using COMP1640.Repository.IRepository;
 using static System.Net.WebRequestMethods;
+using COMP1640.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Net.Mail;
+using Org.BouncyCastle.Asn1.X509;
+
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -26,13 +31,20 @@ namespace COMP1640.Areas.User.Controllers
 
     public class PostsController : Controller
     {
+        private readonly IUsersRepository _usersRepository;
         private readonly ApplicationDbContext _context;
         private readonly IPostRepository _postRepository;
-
-        public PostsController(ApplicationDbContext context, IPostRepository postRepository)
+        private readonly IEmailSender _emailSender;
+        private readonly ISendEmail _sendEmail;
+        public PostsController(ApplicationDbContext context, IPostRepository postRepository, IUsersRepository usersRepository, IEmailSender emailSender,
+            ISendEmail sendEmail)
         {
+            _usersRepository = usersRepository;
             _context = context;
-            _postRepository = postRepository;
+            _postRepository = postRepository; 
+            _emailSender = emailSender;
+            _sendEmail = sendEmail;
+
         }
 
         // GET: User/Posts
@@ -200,6 +212,10 @@ namespace COMP1640.Areas.User.Controllers
             postCommentModel.Date = DateTime.Now;
             postCommentModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var post = _context.Posts.SingleOrDefault(p => p.Id == postCommentModel.PostId);
+            List<AppUserModel> result = await _usersRepository.GetUsers();
+            var postUser = result.FirstOrDefault(u => u.Id == post.UserId);
+          
+            
             var category = _context.Categories.SingleOrDefault(c => c.Name == post.CategoryName);
             if (category.FinalClosureDate < DateTime.Now)
             {
@@ -208,8 +224,12 @@ namespace COMP1640.Areas.User.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(postCommentModel);
+                    var subject = "New comment on your post";
+                    var message = $"Dear {postUser.UserName},\n\nA new comment has been added to your post. Please check it out.\n\nThank you.";
+                     _sendEmail.SendEMail(postUser.Email, subject, message);
                     await _context.SaveChangesAsync();
-                    return Json(new UserReponseManager { Message = "Commented" });
+                   
+                return Json(new UserReponseManager { Message = "Commented" });
                 }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
