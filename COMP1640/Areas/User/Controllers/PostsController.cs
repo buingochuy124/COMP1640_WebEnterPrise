@@ -18,6 +18,7 @@ using System.IO;
 using System.IO.Compression;
 using COMP1640.Repository.IRepository;
 using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Hosting;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -44,7 +45,11 @@ namespace COMP1640.Areas.User.Controllers
                 .Include(p => p.User)
                 // .Include(p => p.PostComments)
                 // .Include(p => p.PostInteracts)
+                // .Include(p => p.PostInteracts)
                 .ToListAsync();
+
+
+
             ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
             posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
@@ -72,6 +77,11 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.CurrentPage = currentPage;
             ViewBag.PostsQuantity = result.Count;
             ViewBag.PostsPerPage = 5;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract =  _context.PostInteracts.Where(p => p.UserId == userId).ToList();
+
+            ViewBag.PostInteract = postInteract;
+            //var postInteract = await _context.PostInteracts.FirstOrDefaultAsync(pi => pi.PostId == post.Id && pi.UserId == userId);
 
 
             result = result.Skip((currentPage - 1) * 2).Take(2).ToList();

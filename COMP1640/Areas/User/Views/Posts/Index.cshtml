@@ -6,9 +6,9 @@
     List<PostModel> NotApprovedPosts = ViewBag.NotApprovedPosts;
     var CurrentPage = ViewBag.CurrentPage;
     var PostsQuantity =  ViewBag.PostsQuantity;
- 
-    var postInteract = ViewData["PostInteract"] as PostInteractModel;
 
+    var postInteract = ViewBag.PostInteract as List<PostInteractModel>;
+    Console.WriteLine(postInteract);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -164,8 +164,7 @@
                                                     </div>
                                                     <hr/>
                                                     <div class="timeline-footer pt-0" style="background-color:#dee2e6">
-
-                                                    @if (postInteract == null)
+                                                    @if (postInteract.Count == 0)
                                                     {
                                                         <button class="btn btn-primary like-btn" id="btn_like_@item.Id" type="submit">
                                                             <i class="fa fa-thumbs-up"></i> Like
@@ -174,11 +173,11 @@
                                                             <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
                                                         </button>
                                                     }
-                                                    else if (!postInteract.IsInteracted)
+                                                    else
                                                     {
-                                                        if (postInteract.IsLike)
+                                                        @if(postInteract.SingleOrDefault(p => p.PostId == item.Id) == null)
                                                         {
-                                                            <button class="btn btn-primary like-btn liked" id="btn_like_@item.Id" type="submit">
+                                                            <button class="btn btn-primary like-btn" id="btn_like_@item.Id" type="submit">
                                                                 <i class="fa fa-thumbs-up"></i> Like
                                                             </button>
                                                             <button class="btn btn-primary dislike-btn" id="btn_disLike_@item.Id" type="submit">
@@ -187,15 +186,43 @@
                                                         }
                                                         else
                                                         {
-                                                            <button class="btn btn-primary like-btn" id="btn_like_@item.Id" type="submit">
-                                                                <i class="fa fa-thumbs-up"></i> Like
-                                                            </button>
-                                                            <button class="btn btn-primary dislike-btn disliked" id="btn_disLike_@item.Id" type="submit">
-                                                                <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
-                                                            </button>
+                                                            @if (postInteract.SingleOrDefault(p => p.PostId == item.Id).IsInteracted == false)
+                                                            {
+                                                                <button class="btn btn-success like-btn" id="btn_like_@item.Id" type="submit">
+                                                                    <i class="fa fa-thumbs-up"></i> Like
+                                                                </button>
+                                                                <button class="btn btn-danger dislike-btn" id="btn_disLike_@item.Id" type="submit">
+                                                                    <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                                                                </button>
+                                                            }
+                                                            else
+                                                            {
+                                                                @if (postInteract.SingleOrDefault(p => p.PostId == item.Id).IsLike == true)
+                                                                {
+                                                                    <button class="btn btn-success like-btn" id="btn_like_@item.Id" type="submit">
+                                                                        <i class="fa fa-thumbs-up"></i> Like
+                                                                    </button>
+                                                                    <button class="btn btn-primary dislike-btn" id="btn_disLike_@item.Id" type="submit">
+                                                                        <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                                                                    </button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button class="btn btn-primary like-btn" id="btn_like_@item.Id" type="submit">
+                                                                        <i class="fa fa-thumbs-up"></i> Like
+                                                                    </button>
+                                                                    <button class="btn btn-danger dislike-btn" id="btn_disLike_@item.Id" type="submit">
+                                                                        <i class="fa fa-thumbs-down fa-fw fa-lg m-r-3"></i> Dislike
+                                                                    </button>
+                                                                }
+
+                                                            }
                                                         }
-                                                    }
                                                        
+                                                       
+                                                    }
+                                                   
+                                                    
                                                         <a href="javascript:;" class="m-r-15 text-inverse-lighter"><i class="fa fa-comments fa-fw fa-lg m-r-3"></i> Comment</a>
 
                                                     </div>
@@ -324,7 +351,9 @@
                 data: { postId: postId },
                 success: function (result) {
                     alert(result.message);
-                    console.log(result);
+                    setTimeout(function () {
+                        window.location.href = "/User/Posts/Index";
+                    }, 1000);
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
@@ -344,7 +373,9 @@
                 data: { postId: postId },
                 success: function (result) {
                     alert(result.message);
-                    console.log(result);
+                    setTimeout(function () {
+                        window.location.href = "/User/Posts/Index";
+                    }, 1000);
                 },
                 error: function (xhr, status, error) {
                     console.log(error);
