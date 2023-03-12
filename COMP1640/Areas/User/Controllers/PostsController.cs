@@ -18,6 +18,7 @@ using System.IO;
 using System.IO.Compression;
 using COMP1640.Repository.IRepository;
 using static System.Net.WebRequestMethods;
+using Microsoft.Extensions.Hosting;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -38,11 +39,10 @@ namespace COMP1640.Areas.User.Controllers
         // GET: User/Posts
         public  async Task<IActionResult> Index(int currentPage)
          {
-            
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
-             // .Include(p => p.PostComments)
+                .Include(p => p.PostComments)
              // .Include(p => p.PostInteracts)
                 .ToListAsync();
             ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
@@ -50,7 +50,9 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.Anonymous = "Anonymous";
             ViewBag.ListCategoryName =  _context.Categories.Select(c => c.Name).ToList();
             var role = User.FindFirstValue(ClaimTypes.Role);
-            var result = posts.OrderByDescending(p => p.Date).ToList();
+            var result = new List<PostModel>();
+            
+            result = posts.OrderByDescending(p => p.Date).ToList();
 
             foreach (var item in result)
             {
@@ -73,8 +75,29 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.PostsQuantity = result.Count;
             ViewBag.PostsPerPage = 5;
 
-
             result = result.Skip((currentPage - 1) * 2).Take(2).ToList();
+            return View(result);
+          
+        }
+
+        public async Task<IActionResult> SortByComment()
+        {
+            var posts = await _context.Posts
+                .Include(p => p.Category)
+                .Include(p => p.User)
+                .Include(p => p.PostComments)
+                .Include(p => p.PostInteracts)
+                .ToListAsync();
+            posts = posts.Where(p => p.IsApproved == true).ToList();
+            ViewBag.Anonymous = "Anonymous";
+            ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract = _context.PostInteracts.Where(p => p.UserId == userId).ToList();
+
+            ViewBag.PostInteract = postInteract;
+
+            var result = await _context.Posts.Include(p => p.PostComments).OrderByDescending(p => p.PostComments.Max(c => c.Date)).ToListAsync();
             return View(result);
         }
 
