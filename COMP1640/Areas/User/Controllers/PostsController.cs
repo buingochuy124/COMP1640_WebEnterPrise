@@ -86,11 +86,16 @@ namespace COMP1640.Areas.User.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.User)
                 .Include(p => p.PostComments)
-                // .Include(p => p.PostInteracts)
+                .Include(p => p.PostInteracts)
                 .ToListAsync();
             posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
             ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract = _context.PostInteracts.Where(p => p.UserId == userId).ToList();
+
+            ViewBag.PostInteract = postInteract;
 
             var result = await _context.Posts.Include(p => p.PostComments).OrderByDescending(p => p.PostComments.Max(c => c.Date)).ToListAsync();
             return View(result);
