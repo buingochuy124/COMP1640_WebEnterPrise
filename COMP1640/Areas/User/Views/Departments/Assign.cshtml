@@ -1,0 +1,46 @@
+﻿@model COMP1640.Models.DepartmentModel
+
+
+@{
+    ViewData["Title"] = "Assign Cordinator";
+    var users = ViewBag.Users as List<AppUserModel>;
+}
+
+<h1>Edit</h1>
+
+<h4>DepartmentModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Assign" >
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">@Model.Name</label>              
+            </div>
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="Name" type="hidden" />
+            <select asp-for="CordinatorId" class="custom-select mb-1">
+                <option value="default"  selected>Select cordinator</option>
+                @foreach (var user in users)
+                {
+                    <option value="@user.Id">@user.Email</option>
+
+                }
+
+            </select>
+
+
+     
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

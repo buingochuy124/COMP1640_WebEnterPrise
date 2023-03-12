@@ -42,6 +42,31 @@ namespace COMP1640.Areas.Admin.Controllers
             return View(result);
            
         }
+        public async Task<IActionResult> AssignToDepartment(string id)
+        {
+            var result = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+            ViewBag.Departments = _context.Departments.ToList();
+            return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignToDepartment([Bind("Id,DepartmentId")] UserViewModel userViewModel)
+        {
+
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == userViewModel.Id);
+            user.DepartmentId = userViewModel.DepartmentId;
+            try
+            {
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: Admin/Users/Create
         public  IActionResult Create()
