@@ -232,7 +232,27 @@ namespace COMP1640.Areas.User.Controllers
 
         }
 
+        public async Task<IActionResult> SortByRate()
+        {
+            var posts = await _context.Posts
+                .Include(p => p.Category)
+                .Include(p => p.User)
+                .Include(p => p.PostComments)
+                .Include(p => p.PostInteracts)
+                .ToListAsync();
+            posts = posts.Where(p => p.IsApproved == true).ToList();
+            ViewBag.Anonymous = "Anonymous";
+            ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var postInteract = _context.PostInteracts.Where(p => p.UserId == userId).ToList();
+
+            ViewBag.PostInteract = postInteract;
+            ViewBag.PostInteract = postInteract;
+
+            var result = await _context.Posts.Include(p => p.PostInteracts).OrderByDescending(p => p.PostInteracts.Count).ToListAsync();
+            return View(result);
+        }
 
         public async Task<IActionResult> Like(string postId)
         {
