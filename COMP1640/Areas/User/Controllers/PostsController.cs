@@ -18,6 +18,8 @@ using System.IO;
 using System.IO.Compression;
 using COMP1640.Repository.IRepository;
 using static System.Net.WebRequestMethods;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using COMP1640.Repository;
 
 using COMP1640.Repository;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -37,6 +39,7 @@ namespace COMP1640.Areas.User.Controllers
         private readonly IPostRepository _postRepository;
         private readonly IEmailSender _emailSender;
         private readonly ISendEmail _sendEmail;
+        
         public PostsController(ApplicationDbContext context, IPostRepository postRepository, IUsersRepository usersRepository, IEmailSender emailSender,
             ISendEmail sendEmail)
         {
@@ -45,6 +48,7 @@ namespace COMP1640.Areas.User.Controllers
             _postRepository = postRepository; 
             _emailSender = emailSender;
             _sendEmail = sendEmail;
+            _usersRepository = usersRepository;
 
         }
 
@@ -203,16 +207,36 @@ namespace COMP1640.Areas.User.Controllers
             postModel.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
             postModel.CategoryClosureDate = _context.Categories.FirstOrDefault(c => c.Id == postModel.CategoryId).ClosureDate;
+            List<AppUserModel> result = await _usersRepository.GetUsers();
+           
             var category = _context.Categories.SingleOrDefault(c => c.Name == postModel.CategoryName);
             if (category.ClosureDate < DateTime.Now)
             {
                 return Json(new UserReponseManager { Message = "This category has expired" });
             }
-            if (ModelState.IsValid)
-            {
-                _context.Add(postModel);
+
+                if (ModelState.IsValid)
+                {
+                    _context.Add(postModel);
+                foreach (var user in result)
+                {
+                    if (user.Id == "202")
+                    {
+                        var subject = "New post submitted";
+                        var message = $"Dear {user.UserName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
+                        _sendEmail.SendEMail(user.Email, subject, message);
+                       
+                    }
+                    else if (user.Id == "203")
+                    {
+                        var subject = "New post submitted";
+                        var message = $"Dear {user.UserName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
+                        _sendEmail.SendEMail(user.Email, subject, message);
+                        
+                    }
+                }
                 await _context.SaveChangesAsync();
-                return Json(new UserReponseManager { Message = "Posted" });
+                    return Json(new UserReponseManager { Message = "Posted" });
             }
 
             return Json(new UserReponseManager { Message = "Some thing wrong ..." });
