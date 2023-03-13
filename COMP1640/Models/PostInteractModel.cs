@@ -19,6 +19,6 @@ namespace COMP1640.Models
         public bool IsAnonymous { get; set; }
         public bool IsInteracted { get; set; }
         public bool IsLike﻿ { get; set; }
-
+        
     }
 }
