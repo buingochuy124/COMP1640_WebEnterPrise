@@ -1,0 +1,57 @@
+﻿@using COMP1640.ViewModels;
+@model List<DepartmentViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Codinator Name
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CordinatorName )
+            </td>
+            <td>
+                    @if (item.CordinatorName == "N/A")
+                    {
+                        <a asp-action="Assign" asp-route-id="@item.Id">Assign Cordinator </a> 
+
+                    }
+                    else{
+         @*               <a href="/User/Department/Edit?id=@item.Id">Edit | </a> 
+                        <a href="/User/Department/Details?id=@item.Id">Details | </a> 
+                        <a href="/User/Department/Delete?id=@item.Id">Delete</a>*@
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit | </a> 
+                        <a asp-action="Details" asp-route-id="@item.Id">Details | </a> 
+                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+                    }
+                    
+
+                    
+                 
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -80,7 +80,7 @@ namespace COMP1640.Repository
 
         public async Task<List<AppUserModel>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Department).ToListAsync();
         }
 
         public async Task<UserReponseManager> UpdateUser(UserViewModel model, string roleName)

@@ -44,7 +44,7 @@ namespace COMP1640.Areas.User.Controllers
 
 
             int totalPostCount = _context.Posts.Count();
-            int totalDepartmentCount = _context.Department
+            int totalDepartmentCount = _context.Departments
             .Select(d => d.Name)
             .Distinct()
              .Count();
