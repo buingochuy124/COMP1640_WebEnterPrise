@@ -95,9 +95,12 @@ namespace COMP1640.Areas.Identity.Pages.Account
 			{
 				var user = new AppUserModel { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.PhoneNumber, FirstName = Input.FirstName, LastName = Input.LastName};
 				var result = await _userManager.CreateAsync(user, Input.Password);
+
 				if (result.Succeeded)
 				{
-					_logger.LogInformation("User created a new account with password.");
+					var addRoleStaffToUser = await _userManager.AddToRoleAsync(user, Utils.Role.Staff);
+
+					 _logger.LogInformation("User created a new account with password.");
 
 					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 					code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
