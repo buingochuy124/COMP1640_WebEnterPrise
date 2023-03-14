@@ -5,7 +5,12 @@
     Layout = "/Views/Shared/_LoginLayout.cshtml";
     ViewData["Title"] = "LOGIN";
 }
-
+@if (TempData["AlertMessage"] != null)
+{
+    <script>
+        alert(' @TempData["AlertMessage"]');
+    </script>
+}
 <div class="p-5">
     <div class="text-center">
         <h1 class="h4 text-gray-900 mb-4">@ViewData["Title"]</h1>
@@ -29,6 +34,7 @@
                 <label class="custom-control-label" asp-for="Input.RememberMe"></label>
             </div>
         </div>
+        <a asp-area="Identity" asp-page="/Account/Register">Do not have an account ?  </a>
 
         <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
 
