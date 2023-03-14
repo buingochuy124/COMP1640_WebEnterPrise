@@ -101,7 +101,7 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.PostInteract = postInteract;
             //var postInteract = await _context.PostInteracts.FirstOrDefaultAsync(pi => pi.PostId == post.Id && pi.UserId == userId);
 
-            result = result.Skip((currentPage - 1) * 2).Take(2).ToList();
+            result = result.Skip((currentPage - 1) * 5).Take(5).ToList();
             return View(result);
           
         }

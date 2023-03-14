@@ -1,4 +1,9 @@
-﻿body {
+﻿.buttonFilter{
+    background-color:red;
+    display:flex;
+}
+
+body {
     margin-top: 20px;
     background: #eee;
 }
