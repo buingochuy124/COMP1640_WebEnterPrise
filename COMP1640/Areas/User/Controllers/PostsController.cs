@@ -21,11 +21,10 @@ using static System.Net.WebRequestMethods;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using COMP1640.Repository;
 
-using COMP1640.Repository;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net.Mail;
 using Org.BouncyCastle.Asn1.X509;
 using Microsoft.Extensions.Hosting;
+using System.Net.Http.Headers;
 
 namespace COMP1640.Areas.User.Controllers
 {
@@ -59,7 +58,7 @@ namespace COMP1640.Areas.User.Controllers
             var posts = await _context.Posts
                 .Include(p => p.Category)
                 .Include(p => p.User)
-                // .Include(p => p.PostComments)
+                 .Include(p => p.PostComments)
                 // .Include(p => p.PostInteracts)
                 // .Include(p => p.PostInteracts)
                 .ToListAsync();
@@ -84,6 +83,7 @@ namespace COMP1640.Areas.User.Controllers
                     foreach (var comment in comments)
                     {
                         item.PostComments.Add(comment);
+                        var userComment = _context.Users.SingleOrDefault(u => u.Id == comment.UserId);
                     }
                 }
             }
@@ -116,6 +116,8 @@ namespace COMP1640.Areas.User.Controllers
                 .ToListAsync();
             posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
+            ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
+
             ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -124,6 +126,7 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.PostInteract = postInteract;
 
             var result = await _context.Posts.Include(p => p.PostComments).OrderByDescending(p => p.PostComments.Max(c => c.Date)).ToListAsync();
+            result.ForEach(r => r.PostComments.ForEach(p => p.User = _context.Users.SingleOrDefault(u => u.Id == p.UserId)));
             return View(result);
         }
 
@@ -231,7 +234,13 @@ namespace COMP1640.Areas.User.Controllers
             postModel.CategoryId = _context.Categories.FirstOrDefault(c => c.Name == postModel.CategoryName).Id;
             postModel.CategoryClosureDate = _context.Categories.FirstOrDefault(c => c.Id == postModel.CategoryId).ClosureDate;
             List<AppUserModel> result = await _usersRepository.GetUsers();
-           
+
+            var departmentId = result.SingleOrDefault(c => c.Id == postModel.UserId).DepartmentId;
+            var cordinatorId = _context.Departments.SingleOrDefault(c => c.Id == departmentId).CordinatorId;
+            var cordinatorEmail = result.SingleOrDefault(u => u.Id == cordinatorId).Email;
+            var cordinatorName = result.SingleOrDefault(u => u.Id == cordinatorId).FirstName;
+
+
             var category = _context.Categories.SingleOrDefault(c => c.Name == postModel.CategoryName);
             if (category.ClosureDate < DateTime.Now)
             {
@@ -241,23 +250,11 @@ namespace COMP1640.Areas.User.Controllers
                 if (ModelState.IsValid)
                 {
                     _context.Add(postModel);
-                foreach (var user in result)
-                {
-                    if (user.Id == "202")
-                    {
+
                         var subject = "New post submitted";
-                        var message = $"Dear {user.UserName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
-                        _sendEmail.SendEMail(user.Email, subject, message);
-                       
-                    }
-                    else if (user.Id == "203")
-                    {
-                        var subject = "New post submitted";
-                        var message = $"Dear {user.UserName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
-                        _sendEmail.SendEMail(user.Email, subject, message);
-                        
-                    }
-                }
+                        var message = $"Dear {cordinatorName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
+                         _sendEmail.SendEMail(cordinatorEmail, subject, message);
+               
                 await _context.SaveChangesAsync();
                     return Json(new UserReponseManager { Message = "Posted" });
             }
@@ -271,7 +268,7 @@ namespace COMP1640.Areas.User.Controllers
             var post = _context.Posts.SingleOrDefault(p => p.Id == postCommentModel.PostId);
             List<AppUserModel> result = await _usersRepository.GetUsers();
             var postUser = result.FirstOrDefault(u => u.Id == post.UserId);
-          
+
             
             var category = _context.Categories.SingleOrDefault(c => c.Name == post.CategoryName);
             if (category.FinalClosureDate < DateTime.Now)
@@ -319,6 +316,7 @@ namespace COMP1640.Areas.User.Controllers
             posts = posts.Where(p => p.IsApproved == true).ToList();
             ViewBag.Anonymous = "Anonymous";
             ViewBag.ListCategoryName = _context.Categories.Select(c => c.Name).ToList();
+            ViewBag.NotApprovedPosts = posts.Where(p => p.IsApproved == false).ToList();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var postInteract = _context.PostInteracts.Where(p => p.UserId == userId).ToList();
@@ -327,6 +325,8 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.PostInteract = postInteract;
 
             var result = await _context.Posts.Include(p => p.PostInteracts).OrderByDescending(p => p.PostInteracts.Count).ToListAsync();
+            result.ForEach(r => r.PostComments.ForEach(p => p.User = _context.Users.SingleOrDefault(u => u.Id == p.UserId)));
+
             return View(result);
         }
 
@@ -372,7 +372,6 @@ namespace COMP1640.Areas.User.Controllers
             ViewBag.PostInteract = postInteract;
             await _context.SaveChangesAsync();
             return Json(new UserReponseManager { Message = "Liked" });
-            return Ok(new { postId });
         }
 
 
@@ -417,7 +416,6 @@ namespace COMP1640.Areas.User.Controllers
 
             await _context.SaveChangesAsync();
             return Json(new UserReponseManager { Message = "DisLiked" });
-            return Ok(new { postId });
         }
     }
 

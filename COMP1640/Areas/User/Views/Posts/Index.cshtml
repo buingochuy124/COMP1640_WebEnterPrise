@@ -28,29 +28,16 @@
 </head>
 <body>
     <div class="container" >
-        <div class="col">
-        <div class="row" >
-                 <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByComment">Sort By Comment</a>
-        </div>
-        <br />
-        <div class="row">
-
-        <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/Index">Sort By Date</a>
-        </div>
-        <br />
-        <div class="row" >
-
-                <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByRate">Sort By Rate</a>
-        </div>
-                </div>
-
+            <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByComment">Sort By Comment</a>
+            <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/Index">Sort By Date</a>
+            <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByRate">Sort By Rate</a>
         <div class="row">
             
 
             <div class="col-md-12">
               
                 <div id="content" class="content content-full-width">
-                        <div class="profile-content " style="margin-top:-136px;">
+                        <div class="profile-content " >
 
                             <div class="tab-content p-0">
 
@@ -279,7 +266,9 @@
                                                                     }
                                                                 }
                                                                 else{
-                                                                <p>@comment.User.FirstName: @comment.Content</p>
+                                                                    
+                                                                        <p>@comment.User.FirstName: @comment.Content</p>
+                                                                        
 
                                                                 }
                                                   
