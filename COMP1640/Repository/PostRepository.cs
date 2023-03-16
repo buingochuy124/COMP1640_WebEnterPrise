@@ -28,10 +28,10 @@ namespace COMP1640.Repository
             // this method creates a data table
             DataTable myDataTable = new DataTable();
 
-            myDataTable.Columns.Add("POST", typeof(string));
-            myDataTable.Columns.Add("CONTENT", typeof(string));
-            myDataTable.Columns.Add("CATEGORY", typeof(string));
-            myDataTable.Columns.Add("FinalClosureDate", typeof(string));
+            myDataTable.Columns.Add("Post Date", typeof(string));
+            myDataTable.Columns.Add("Content", typeof(string));
+            myDataTable.Columns.Add("Category", typeof(string));
+            myDataTable.Columns.Add("User Email", typeof(string));
 
             var category = _context.Categories.SingleOrDefault(c => c.Id == categoryId);
             var posts = _context.Posts.Where(p => p.CategoryId == category.Id).ToList();

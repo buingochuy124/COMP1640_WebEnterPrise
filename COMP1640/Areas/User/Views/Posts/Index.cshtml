@@ -28,15 +28,16 @@
 </head>
 <body>
     <div class="container" >
-
-        <div class="row">
             <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByComment">Sort By Comment</a>
             <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/Index">Sort By Date</a>
             <a class="btn btn-primary f-s-12 rounded-corner" type="Button" href="/User/Posts/SortByRate">Sort By Rate</a>
+        <div class="row">
+            
+
             <div class="col-md-12">
               
                 <div id="content" class="content content-full-width">
-                        <div class="profile-content">
+                        <div class="profile-content " >
 
                             <div class="tab-content p-0">
 
@@ -81,6 +82,22 @@
                                                         </label>
                                                         <input type="checkbox" class="form-check-input" id="anonymousPost" value="Anonymous">
 
+
+
+                                                        <label class="form-check-label text-danger" style="position:absolute">
+                                                            Anonymous Post
+                                                        </label>
+
+                                                        
+
+                                                  
+                                                    <br />
+
+                                                    <div class="form-check p-1">
+                                                        <input class="form-check-input" type="checkbox"  id="agreeTerm">
+                                                      <label class="form-check-label" for="flexCheckDefault">
+                                                            Do you agree term ?
+                                                        </label>
                                                     </div>
 
 
@@ -249,7 +266,9 @@
                                                                     }
                                                                 }
                                                                 else{
-                                                                <p>@comment.User.FirstName: @comment.Content</p>
+                                                                    
+                                                                        <p>@comment.User.FirstName: @comment.Content</p>
+                                                                        
 
                                                                 }
                                                   
@@ -410,8 +429,16 @@
         var postContent = $("#postContent").val();
         var isAnonymous = $("#anonymousPost").is(":checked");
         var categoryName = $("#categoryName").val();
+        var agreeTerm = $("#agreeTerm");
 
-
+        if(agreeTerm.is(":checked") == false){
+            alert("Must Be checked term before posted");
+            return;
+        }
+        if (categoryName == "default") {
+            alert("Category required");
+            return;
+        }
         var postModel = {
             IsAnonymous: isAnonymous,
             Content: postContent,

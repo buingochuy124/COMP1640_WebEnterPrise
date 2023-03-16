@@ -14,6 +14,8 @@ namespace COMP1640.Data.SeedData
             SeedUserRoles(builder);
             SeedDepartment(builder);
         }
+      
+
         public static void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<RoleModel>().HasData(
@@ -60,60 +62,64 @@ namespace COMP1640.Data.SeedData
                     FirstName = "Ngoc Huy",
                     LastName = "Bui",
                     EmailConfirmed = true,
+                    DepartmentId = "998"
+
                 },
                 new AppUserModel()
                 {
                     Id = "202",
-                    UserName = "Coordinator202@gmail.com",
-                    NormalizedUserName = "Coordinator202@gmail.com".ToUpper(),
-                    Email = "Coordinator202@gmail.com",
-                    NormalizedEmail = "Coordinator202@gmail.com".ToUpper(),
+                    UserName = "pbinh.2501@gmail.com",
+                    NormalizedUserName = "pbinh.2501@gmail.com".ToUpper(),
+                    Email = "pbinh.2501@gmail.com",
+                    NormalizedEmail = "pbinh.2501@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
                     FirstName = "Thanh Binh",
                     LastName = "Phan",
                     EmailConfirmed = true,
+                    DepartmentId = "999"
 
                 },
                  new AppUserModel()
                  {
                      Id = "203",
-                     UserName = "Coordinator203@gmail.com",
-                     NormalizedUserName = "Coordinator203@gmail.com".ToUpper(),
-                     Email = "Coordinator203@gmail.com",
-                     NormalizedEmail = "Coordinator203@gmail.com".ToUpper(),
+                     UserName = "vothanhluan19102001@gmail.com",
+                     NormalizedUserName = "vothanhluan19102001@gmail.com".ToUpper(),
+                     Email = "vothanhluan19102001@gmail.com",
+                     NormalizedEmail = "vothanhluan19102001@gmail.com".ToUpper(),
                      PasswordHash = hasher.HashPassword(null, "Default@123"),
                      SecurityStamp = Guid.NewGuid().ToString("D"),
-                     FirstName = "Luan",
+                     FirstName = "Thanh Luan",
                      LastName = "Vo",
                      EmailConfirmed = true,
+                     DepartmentId = "998"
 
                  },
                 new AppUserModel()
                 {
                     Id = "204",
-                    UserName = "Manager204@gmail.com",
-                    NormalizedUserName = "Manager204@gmail.com".ToUpper(),
-                    Email = "Manager204@gmail.com",
-                    NormalizedEmail = "Manager204@gmail.com".ToUpper(),
+                    UserName = "nttrung9cc@gmail.com",
+                    NormalizedUserName = "nttrung9cc@gmail.com".ToUpper(),
+                    Email = "nttrung9cc@gmail.com",
+                    NormalizedEmail = "nttrung9cc@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
-                    FirstName = "Nguyen Thanh",
-                    LastName = "Trung",
+                    FirstName = "Thanh Trung",
+                    LastName = "Nguyen",
                     EmailConfirmed = true,
                     DepartmentId = "998"
                 },
                 new AppUserModel()
                 {
                     Id = "205",
-                    UserName = "Staff205@gmail.com",
-                    NormalizedUserName = "Staff205@gmail.com".ToUpper(),
-                    Email = "Staff205@gmail.com",
-                    NormalizedEmail = "Staff205@gmail.com".ToUpper(),
+                    UserName = "tuanle273@gmail.com",
+                    NormalizedUserName = "tuanle273@gmail.com".ToUpper(),
+                    Email = "tuanle273@gmail.com",
+                    NormalizedEmail = "tuanle273@gmail.com".ToUpper(),
                     PasswordHash = hasher.HashPassword(null, "Default@123"),
                     SecurityStamp = Guid.NewGuid().ToString("D"),
-                    FirstName = "Anh",
-                    LastName = "Tuan",
+                    FirstName = "Tuan Anh",
+                    LastName = "Le",
                     EmailConfirmed = true,
                     DepartmentId= "999"
                 });

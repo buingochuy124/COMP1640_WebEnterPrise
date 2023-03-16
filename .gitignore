@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /COMP1640/Migrations
+/COMP1640/wwwroot/Documents
