@@ -10,10 +10,12 @@ using COMP1640.Models;
 using COMP1640.ViewModels;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace COMP1640.Areas.Coordinator.Controllers
 {
     [Area("Coordinator")]
+    [Authorize("RequireCoordinator")]
     public class DepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
