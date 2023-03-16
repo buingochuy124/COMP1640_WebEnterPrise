@@ -1,0 +1,53 @@
+﻿@model IEnumerable<COMP1640.ViewModels.CoordinatorDepartmentViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentName)
+            </th>
+   
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostContribute)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+            </td>
+            
+         
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostContribute)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
