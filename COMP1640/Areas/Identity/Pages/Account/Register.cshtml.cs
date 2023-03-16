@@ -76,7 +76,7 @@ namespace COMP1640.Areas.Identity.Pages.Account
 			public string FirstName { get; set; }
 
 			[Required]
-			[Display(Name = "FirstName")]
+			[Display(Name = "LastName")]
 			public string LastName { get; set; }
 
 		}
