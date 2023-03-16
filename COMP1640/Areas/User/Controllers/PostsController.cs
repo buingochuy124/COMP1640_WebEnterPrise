@@ -140,6 +140,7 @@ namespace COMP1640.Areas.User.Controllers
                // .Include(p => p.PostComments)
                // .Include(p => p.PostInteracts)
                .ToListAsync();
+            
 
             var result = posts.OrderByDescending(p => p.Date).ToList();
             return View(result);
@@ -247,19 +248,22 @@ namespace COMP1640.Areas.User.Controllers
                 return Json(new UserReponseManager { Message = "This category has expired" });
             }
 
-                if (ModelState.IsValid)
-                {
-                    _context.Add(postModel);
+            if (ModelState.IsValid)
+            {
+                _context.Add(postModel);
 
-                        var subject = "New post submitted";
-                        var message = $"Dear {cordinatorName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
-                         _sendEmail.SendEMail(cordinatorEmail, subject, message);
-               
+                    var subject = "New post submitted";
+                    var message = $"Dear {cordinatorName},\n\nA new post has been submitted. Please check it out.\n\nThank you.";
+                        _sendEmail.SendEMail(cordinatorEmail, subject, message);
+                         
                 await _context.SaveChangesAsync();
-                    return Json(new UserReponseManager { Message = "Posted" });
+                return Json(new UserReponseManager { Message = "Posted" });
             }
 
-            return Json(new UserReponseManager { Message = "Some thing wrong ..." });
+            else
+            {
+                return Json(new UserReponseManager { Message = "Some thing wrong ..." });
+            }
         }
         public async Task<IActionResult> CreatePostComment([Bind("Content,Date,IsAnonymous,PostId")] PostCommentModel postCommentModel)
         {
