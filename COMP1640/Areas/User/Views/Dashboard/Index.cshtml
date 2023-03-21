@@ -1,0 +1,92 @@
+﻿@model Dictionary<string, int>
+<div style="white-space: nowrap;">
+    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block; ">
+        <div class="card-header">Total Post</div>
+        <div class="card-body">
+            <h4 class="card-title">Total Post Count</h4>
+            <p class="card-text"><span class="badge bg-success">@ViewBag.TotalPostCount</span></p>
+        </div>
+    </div>
+    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+        <div class="card-header">Total Department</div>
+        <div class="card-body">
+            <h4 class="card-title">Total Department Count</h4>
+            <p class="card-text"><span class="badge bg-success">@ViewBag.totalDepartmentCount</span></p>
+        </div>
+    </div>
+    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+        <div class="card-header">Total User without Department</div>
+        <div class="card-body">
+            <h4 class="card-title">User without Department</h4>
+            <p class="card-text"><span class="badge bg-success">@ViewBag.TotalUserWithoutDepartmentCount</span></p>
+        </div>
+    </div>
+    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+        <div class="card-header">Total Idea without Comment</div>
+        <div class="card-body">
+            <h4 class="card-title">Idea without Comment</h4>
+            <p class="card-text"><span class="badge bg-success">@ViewBag.TotalIdeasWithoutCommentCount</span></p>
+        </div>
+    </div>
+</div>
+<div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+    <div class="card-header">Total Anonymous Idea</div>
+    <div class="card-body">
+        <h4 class="card-title">Anonymous Idea</h4>
+        <p class="card-text"><span class="badge bg-success"> @ViewBag.TotalAnonymousIdeaCount</span></p>
+    </div>
+</div>
+<div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+    <div class="card-header">Total Anonymous Comment</div>
+    <div class="card-body">
+        <h4 class="card-title">Anonymous Comment</h4>
+        <p class="card-text"><span class="badge bg-success"> @ViewBag.TotalAnonymousCommentCount</span></p>
+    </div>
+</div>
+<div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+    <div class="card-header">Total Category</div>
+    <div class="card-body">
+        <h4 class="card-title">Category</h4>
+        <p class="card-text"><span class="badge bg-success"> @ViewBag.TotalCategoryCount</span></p>
+    </div>
+</div>
+<div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+    <div class="card-header">Total User</div>
+    <div class="card-body">
+        <h4 class="card-title">Total User</h4>
+        <p class="card-text"><span class="badge bg-success"> @ViewBag.TotalUserCount </span></p>
+    </div>
+</div>
+<canvas id="myChart" width="1000" height="500"></canvas>
+
+@section scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var data = @Html.Raw(Json.Serialize(Model.Values));
+        var labels = @Html.Raw(Json.Serialize(Model.Keys));
+
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Post counts by department',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}

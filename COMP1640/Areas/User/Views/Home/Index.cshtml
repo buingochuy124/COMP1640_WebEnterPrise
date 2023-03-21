@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@if (TempData["DangerMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <strong>@TempData["DangerMessage"]</strong>
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissable">
+        <strong>@TempData["SuccessMessage"]</strong>
+    </div>
+}
+<div class="text-center">
+    <h1 class="display-4">DB TEAM</h1>
+    <img src="https://res.cloudinary.com/dnj7dje92/image/upload/v1678765081/335930419_1143381753019571_9055590994889285397_n_t8ej5u.jpg" alt="daubuoiteam" width="1000" height="800">
+
+</div>

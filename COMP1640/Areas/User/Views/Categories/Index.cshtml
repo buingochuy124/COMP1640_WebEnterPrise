@@ -1,0 +1,88 @@
+﻿@model IEnumerable<COMP1640.Models.CategoryModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosureDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalClosureDate)
+            </th>
+            <th></th>
+              @if (User.IsInRole("Admin"))
+                    {
+            <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                    @if (item.FinalClosureDate < DateTime.Now)
+                    {
+                        <p style="color:red;">
+                            @Html.DisplayFor(modelItem => item.ClosureDate)
+
+                        </p>
+                    }
+                    else{
+                        <p style="color:green;">
+                            @Html.DisplayFor(modelItem => item.ClosureDate)
+
+                        </p>
+
+                    }
+            </td>
+            <td>
+                @if(item.FinalClosureDate < DateTime.Now){
+                    <p style="color:red;">
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+
+                    </p>
+                }
+                else{
+                        <p style="color:green;">
+                            @Html.DisplayFor(modelItem => item.FinalClosureDate)
+
+                        </p>
+
+                }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+             
+            </td>
+            <td>
+                
+                    @if (User.IsInRole("Manager"))
+                    {
+                        @if (item.FinalClosureDate < DateTime.Now)
+                        {
+                            <a href="/User/Posts/DownloadFilesInZip?categoryId=@item.Id">Dowload Category Document</a>
+                        }
+                    }
+            </td>
+               
+        </tr>
+}
+    </tbody>
+</table>

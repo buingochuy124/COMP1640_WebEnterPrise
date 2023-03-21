@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUserModel> SignInManager
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - COMP1640</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 sidebar">
+            <div class="container">
+                <a class="navbar-brand" asp-area="User" asp-controller="Posts" asp-action="Index">COMP1640</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="User" asp-controller="Home" asp-action="Index">About us</a>
+                        </li>
+                        
+                        @if (User.IsInRole("Manager")){
+                            @if (User.IsInRole("Coordinator")){
+                                @if (User.IsInRole("Admin"))
+                                {
+
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="User" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="User" asp-controller="Departments" asp-action="Index">Departments For Admin</a>
+                                    </li>
+                                }
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Coordinator" asp-controller="Departments" asp-action="Index">Departments</a>
+                                </li>
+                            }
+                            
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="User" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
+                       
+                        }
+
+                     
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - COMP1640 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
