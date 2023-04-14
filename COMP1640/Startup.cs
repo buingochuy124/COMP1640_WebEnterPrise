@@ -50,18 +50,18 @@ namespace COMP1640
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdmin", policy =>
-                    policy.RequireRole(Utils.Role.Admin, Utils.Role.Coordinator, Utils.Role.Manager, Utils.Role.Staff));
+                    policy.RequireRole(Utils.Role.Admin));
 
                 options.AddPolicy("RequireManager", policy =>
-                   policy.RequireRole(Utils.Role.Manager, Utils.Role.Staff));
+                   policy.RequireRole(Utils.Role.Admin,Utils.Role.Manager, Utils.Role.Coordinator));
 
 
                 options.AddPolicy("RequireStaff", policy =>
-                   policy.RequireRole(Utils.Role.Staff));
+                   policy.RequireRole(Utils.Role.Admin, Utils.Role.Manager, Utils.Role.Coordinator,Utils.Role.Staff));
 
 
                 options.AddPolicy("RequireCoordinator", policy =>
-                   policy.RequireRole(Utils.Role.Coordinator, Utils.Role.Manager, Utils.Role.Staff));
+                   policy.RequireRole(Utils.Role.Admin, Utils.Role.Coordinator));
             });
 
 
